@@ -4,7 +4,14 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(16)
+<<<<<<< HEAD
 DATABASE_FILE = 'database.db'
+=======
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+DATABASE_FILE = 'instance/database.db'
+
+db.init_app(app)
+>>>>>>> 9b64c7a (work flow)
 
 # Function handling the hash password
 def hash_password(password):
@@ -86,7 +93,6 @@ def signup():
         # Get form data
         email = request.form['email']
         username = secure_filename(request.form['username'])
-        account = request.form['account']
         password = request.form['password']
         session['username'] = username
 
@@ -99,8 +105,13 @@ def signup():
         password_hash = hash_password(password)
 
         # Insert user into the database
+<<<<<<< HEAD
         query = "INSERT INTO users (email, username, account, password_hash) VALUES (?, ?, ?, ?)"
         args = (email, username, account, password_hash)
+=======
+        query = "INSERT INTO user (email, username, password) VALUES (?, ?, ?)"
+        args = (email, username, password_hash)
+>>>>>>> 9b64c7a (work flow)
 
         db_execute(query, args)
 
@@ -165,6 +176,13 @@ def dashboard():
         return redirect(url_for('login'))
     return render_template('dashboard.html')
 
+@app.route('/transaction')
+def transaction():
+    if g.user is None:
+        return redirect(url_for('login'))
+    user_accounts = User.query.filter_by(id=g.user['id']).all()
+    return render_template('transaction.html', user_accounts=user_accounts)
+
 @app.route('/products')
 def products():
     if g.user is None:
@@ -175,6 +193,35 @@ def products():
 def createaccount():
     if g.user is None:
         return redirect(url_for('login'))
+<<<<<<< HEAD
+=======
+    if request.method == 'POST':
+        try:
+            fname = request.form['fname']
+            lname = request.form['lname']
+            gender = request.form['gender']
+            username = request.form['username']
+
+            # Fetch the current user instance
+            current_user = User.query.get(g.user['id'])
+
+            # Update the user details
+            current_user.username = username
+            current_user.firstname = fname
+            current_user.lastname = lname
+            current_user.gender = gender
+
+            # Commit the changes to the database
+            db.session.commit()
+
+            # Redirect to account page
+            return redirect(url_for('accounts'))
+        except Exception as e:
+            print(f"Error updating user details: {e}")
+            db.session.rollback()
+
+    # Render the createaccount page
+>>>>>>> 9b64c7a (work flow)
     return render_template('createaccount.html')
 
 @app.route('/accounts')
@@ -202,6 +249,9 @@ def history():
     return render_template('history.html')
 
     
+@app.errorhandler(400)
+def handle_bad_request(e):
+    return 'Bad Request: {0}'.format(e.description), 400
 
 if __name__ == '__main__':
     app.run()

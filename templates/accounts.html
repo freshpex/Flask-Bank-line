@@ -114,6 +114,7 @@ width: 150px;
   <source src="../static/video5.mp4" type="video/mp4">
 </video> 
 
+<<<<<<< HEAD
   
 <a href="./deposite1.html"><img class="kol1" data-aos="zoom-in" data-aos-delay="100" style="width: 150px;" src="../static/sbi.jpg" alt=""><br>
   <h1 id="pp" data-aos="zoom-in" data-aos-delay="100" style="color: rgb(247, 247, 247);">Deposite Form</h1></a> <hr style="color: white;">
@@ -139,6 +140,16 @@ width: 150px;
   <br><br><br>
 
   <a href="verification1.html"><button  style="width: 100px;" height="100px"  >Save & continue</button></a>
+=======
+              <h1>User Accounts</h1>
+              <ul>
+                  {% for account in user_accounts %}
+                      <li>Account Number: {{ account.account }}</li>
+                      <li>Account Type: {{ account.account_type }}</li>
+                    </li><strong>Balance:</strong> {{ account.balance }}<br></li>
+                  {% endfor %}
+              </ul>
+>>>>>>> 9b64c7a (work flow)
 
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
