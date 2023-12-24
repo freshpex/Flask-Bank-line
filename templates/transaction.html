@@ -61,8 +61,15 @@ background: #3bb986;
             transform: translateX(-50%) translateY(-50%);
             z-index: -10;
         }
-</style>
-<!-- ======= Header ======= -->
+
+  .center{
+width: 150px;
+ margin: 40px auto;
+ 
+}
+ </style>
+<body>
+  <!-- ======= Header ======= -->
 <header id="header"class="fixed-top " >
   <div class="container d-flex align-items-center">
 
@@ -86,21 +93,14 @@ background: #3bb986;
 
   </div>
 </header><!-- End Header -->
-<body>
-  <style>
-   .center{
-width: 150px;
-  margin: 40px auto;
-  
-}
-  </style>
+
  <!-- video -->
  <video autoplay muted loop id="myVideo">
   <source src="../static/video5.mp4" type="video/mp4">
 </video> 
 
   
-<!-- templates/transaction.html -->
+
 <form method="POST" action="{{ url_for('process_transaction') }}">
   <label for="transaction_type">Transaction Type:</label>
   <select name="transaction_type" id="transaction_type" required>
@@ -129,7 +129,7 @@ width: 150px;
   <label for="source_account">Source Account:</label>
   <select name="source_account" required>
       {% for account in user_accounts %}
-          <option value="{{ account.account_number }}">{{ account.account_number }}</option>
+          <option value="{{ account.account }}">{{ account.account }}</option>
       {% endfor %}
   </select>
 

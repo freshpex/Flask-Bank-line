@@ -6,7 +6,8 @@ from model import db, User, Transaction, Receipt, Loan
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(16)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-DATABASE_FILE = 'database.db'
+DATABASE_FILE = 'instance/database.db'
+
 db.init_app(app)
 
 # Function handling the hash password
@@ -89,7 +90,6 @@ def signup():
         # Get form data
         email = request.form['email']
         username = secure_filename(request.form['username'])
-        account = request.form['account']
         password = request.form['password']
         session['username'] = username
 
@@ -102,8 +102,8 @@ def signup():
         password_hash = hash_password(password)
 
         # Insert user into the database
-        query = "INSERT INTO user (email, username, account, password) VALUES (?, ?, ?, ?)"
-        args = (email, username, account, password_hash)
+        query = "INSERT INTO user (email, username, password) VALUES (?, ?, ?)"
+        args = (email, username, password_hash)
 
         db_execute(query, args)
 
@@ -169,6 +169,13 @@ def dashboard():
     user_accounts = User.query.filter_by(id=g.user['id']).all()
     return render_template('dashboard.html', user_accounts=user_accounts)
 
+@app.route('/transaction')
+def transaction():
+    if g.user is None:
+        return redirect(url_for('login'))
+    user_accounts = User.query.filter_by(id=g.user['id']).all()
+    return render_template('transaction.html', user_accounts=user_accounts)
+
 @app.route('/products')
 def products():
     if g.user is None:
@@ -180,31 +187,29 @@ def createaccount():
     if g.user is None:
         return redirect(url_for('login'))
     if request.method == 'POST':
-        fname = request.form['fname']
-        lname = request.form['lname']
-        gender = request.form['gender']
-        profile = request.files['profile']
-        email = request.form['email']
-        username = request.form['username']
-        account_type = request.form['account_type']
+        try:
+            fname = request.form['fname']
+            lname = request.form['lname']
+            gender = request.form['gender']
+            username = request.form['username']
 
-        # Create a new user instance
-        new_user = User(
-            email=email,
-            username=username,
-            account_type=account_type,
-            firstname=fname,
-            lastname=lname,
-            gender=gender,
-            profile_image=profile
-        )
+            # Fetch the current user instance
+            current_user = User.query.get(g.user['id'])
 
-        # Add the user to the database
-        db.session.add(new_user)
-        db.session.commit()
+            # Update the user details
+            current_user.username = username
+            current_user.firstname = fname
+            current_user.lastname = lname
+            current_user.gender = gender
 
-        # Redirect to account page
-        return redirect(url_for('account'))
+            # Commit the changes to the database
+            db.session.commit()
+
+            # Redirect to account page
+            return redirect(url_for('accounts'))
+        except Exception as e:
+            print(f"Error updating user details: {e}")
+            db.session.rollback()
 
     # Render the createaccount page
     return render_template('createaccount.html')
@@ -342,6 +347,9 @@ def loan_history(account_number):
 
     return render_template('loan_history.html', account_number=account_number, loan_history=loan_history)
     
+@app.errorhandler(400)
+def handle_bad_request(e):
+    return 'Bad Request: {0}'.format(e.description), 400
 
 if __name__ == '__main__':
     app.run()

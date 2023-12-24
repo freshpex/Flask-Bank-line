@@ -6,7 +6,7 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
   <link rel="icon" href="https://th.bing.com/th/id/OIP.iEljT-80HeVhxxkpjEEl2AHaEo?w=296&h=184&c=7&r=0&o=5&dpr=1.3&pid=1.7" type="image/png" sizes="16x16">
-  <title>State-Bank</title>
+  <title>Bank-Line</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -75,49 +75,50 @@
   <!-- </div> -->
   
   <section>
-    <div class="container" data-aos="fade-up" style="margin-top: 50px;" style="padding-left: 100px;" >
-  <div class="row" style="padding-left: 100px;" >
-    <div class="col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
-      <div class="icon-box" >
-        <a href="./deposite1.html"><div class="icon" id="imj"><img style="width: 150px;" src="../static/bank.png" alt=""></div>
-        <button class="col-md-5 d-flex align-items-stretch mt-4 mt-md-0" id="button1" >  Deposite </a></button>
+  <div class="container" data-aos="fade-up" style="margin-top: 50px;" style="padding-left: 100px;" >
+    <div class="row" style="padding-left: 100px;" >
+      <div class="col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+        <div class="icon-box" >
+          <a href="/deposite"><div class="icon" id="imj"><img style="width: 150px;" src="../static/bank.png" alt=""></div>
+          <button class="col-md-5 d-flex align-items-stretch mt-4 mt-md-0" id="button1" >  Deposite </a></button>
+        </div>
       </div>
-    </div>
     
     <div class="col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="200">
       <div class="icon-box">
-        <a href="./loan.html"><div class="icon" id="imj"><img style="width: 150px;" src="../static/withdrawal.png" alt=""></div> 
+        <a href="/transaction"><div class="icon" id="imj"><img style="width: 150px;" src="../static/withdrawal.png" alt=""></div> 
         <button class="col-md-5 d-flex align-items-stretch mt-4 mt-md-0" id="button1" >withdrawal </a></button>
       </div>
     </div>
     
     <div class="col-md-6 d-flex align-items-stretch mt-4 mt-xl-0" data-aos="zoom-in" data-aos-delay="300" style="padding-top: 60px;">
       <div class="icon-box" >
-        <a href="./loan.html"><div class="icon" id="imj"><img style="width: 150px;" src="../static/insurance.png" alt=""></div> 
-        <button class="col-md-5 d-flex align-items-stretch mt-4 mt-md-0" id="button1" >Insurence </a></button>
+        <a href="/transaction"><div class="icon" id="imj"><img style="width: 150px;" src="../static/insurance.png" alt=""></div> 
+        <button class="col-md-5 d-flex align-items-stretch mt-4 mt-md-0" id="button1" >Transfer </a></button>
       </div>
     </div>
     <div class="col-md-6 d-flex align-items-stretch mt-4 mt-xl-0" data-aos="zoom-in" data-aos-delay="400" style="padding-top: 60px;">
       <div class="icon-box" >
-        <a href="./loan.html"><div class="icon" id="imj"><img style="width: 150px;" src="../static/loan.png" alt=""></div> 
+        <a href="/loan_history"><div class="icon" id="imj"><img style="width: 150px;" src="../static/loan.png" alt=""></div> 
         <button class="col-md-5 d-flex align-items-stretch mt-4 mt-md-0" id="button1" > Loan </a></button>
       </div>
     </div>
   </div>
+  <br><br>
+      <div class="dish">
+       <ul>
+          {% for account in user_accounts %}
+              <li>Account Number: {{ account.account }}</li>
+              <li>Account Type: {{ account.account_type }}</li>
+              <button ><a href="{{ url_for('loan_history', account_number=account.account) }}">Loan History</a></button>
+          {% endfor %}
+      </ul>
 
-  <ul>
-    {% for account in user_accounts %}
-        <li>Account Number: {{ account.account_number }}</li>
-        <li>Account Type: {{ account.account_type }}</li>
-        <li><a href="{{ url_for('loan_history', account_number=account.account_number) }}">Loan History</a></li>
-    {% endfor %}
-</ul>
-
-<h2>Transaction History:</h2>
-<a href="{{ url_for('history') }}">View Transaction History</a>
-  
-</div>
-  </section>
+      <h2>Transaction History:</h2>
+      <button><a href="{{ url_for('history') }}">View Transaction History</a></button>
+    </div>
+  </div>
+</section>
    
   <br><br><br>
   

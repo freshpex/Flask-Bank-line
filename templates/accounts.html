@@ -101,7 +101,7 @@ width: 150px;
               <h1>User Accounts</h1>
               <ul>
                   {% for account in user_accounts %}
-                      <li>Account Number: {{ account.account_number }}</li>
+                      <li>Account Number: {{ account.account }}</li>
                       <li>Account Type: {{ account.account_type }}</li>
                     </li><strong>Balance:</strong> {{ account.balance }}<br></li>
                   {% endfor %}

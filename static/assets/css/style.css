@@ -1930,3 +1930,9 @@ margin-top: 50px;
       margin: 40px;
       
     }
+
+.dish {
+  width: 200px;
+  background-color: #fff;
+  list-style: none;
+}

@@ -105,7 +105,7 @@ width: 150px;
   <label for="source_account">Select the account:</label>
   <select name="source_account" required>
       {% for account in user_accounts %}
-          <option value="{{ account.account_number }}">{{ account.account_number }}</option>
+          <option value="{{ account.account }}">{{ account.account }}</option>
       {% endfor %}
   </select>
 
