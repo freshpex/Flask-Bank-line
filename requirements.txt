@@ -38,4 +38,7 @@ gspread
 google-api-python-client 
 google-auth-httplib2 
 google-auth-oauthlib
+<<<<<<< HEAD
 >>>>>>> a0a89dc (Update requirements.txt.)
+=======
+>>>>>>> 37d2080 (Update requirements.txt.)
