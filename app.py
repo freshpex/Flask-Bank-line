@@ -145,9 +145,6 @@ def login():
 
 @app.route('/signout')
 def signout():
-    visited = "Sign out"
-    user_id = session['user_id']
-
     session.pop('user_id', None)
     return redirect(url_for('index'))
 
@@ -162,8 +159,47 @@ def logout():
 def index():
     return render_template('index.html')
 
+@app.route('/dashboard')
+def dashboard():
+    if g.user is None:
+        return redirect(url_for('login'))
+    return render_template('dashboard.html')
 
+@app.route('/products')
+def products():
+    if g.user is None:
+        return redirect(url_for('login'))
+    return render_template('products.html')
 
+@app.route('/createaccount')
+def createaccount():
+    if g.user is None:
+        return redirect(url_for('login'))
+    return render_template('createaccount.html')
+
+@app.route('/accounts')
+def accounts():
+    if g.user is None:
+        return redirect(url_for('login'))
+    return render_template('accounts.html')
+
+@app.route('/cardpayment')
+def cardpayment():
+    if g.user is None:
+        return redirect(url_for('login'))
+    return render_template('cardpayment.html')
+
+@app.route('/feedbacks')
+def feedbacks():
+    if g.user is None:
+        return redirect(url_for('login'))
+    return render_template('feedbacks.html')
+
+@app.route('/history')
+def history():
+    if g.user is None:
+        return redirect(url_for('login'))
+    return render_template('history.html')
 
     
 
