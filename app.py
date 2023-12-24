@@ -133,7 +133,7 @@ def login():
             # Password is correct, store user ID in session
             # Access the first row's first element
             session['user_id'] = row[0][0]
-            return redirect('/')
+            return redirect('/dashboard')
         else:
             # Password is incorrect
             error = 'Invalid email or password'
