@@ -35,8 +35,7 @@ kiwisolver
 Mako
 MarkupSafe
 pipreqs
-pluggy>=0.3.0
-pip install tornado>=6.2
+pluggy
 psycopg2
 pycodestyle
 pyenchant
@@ -56,8 +55,6 @@ soundex
 soupsieve
 SQLAlchemy
 sqlparse
-tornado>=6.2
-traitlets>=5.4
 urllib3
 gspread
 google-api-python-client 
