@@ -49,14 +49,6 @@
 <meta property="twitter:description" content="Trusted and Reliable with best loan offers" />
 <meta property="twitter:image" content="https://th.bing.com/th/id/OIP.vXkQXqoZ6gkX2g0G4ar0gwHaE8?w=299&h=200&c=7&r=0&o=5&dpr=1.3&pid=1.7" />
 
-<!-- Meta Tags Generated with https://metatags.io -->
-
-  <!-- =======================================================
-  * Template Name: Arsha - v4.9.0
-  * Template URL: https://bootstrapmade.com/arsha-free-bootstrap-html-template-corporate/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
 </head>
 
 <body>
@@ -94,7 +86,16 @@
             </ul>
           </li>
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-          <li><a class="getstarted scrollto" href="#about">Get Started</a></li>
+          <div class="d-flex justify-content-center justify-content-lg-start">
+            {% if g.user %}
+                <!-- User is logged in, do display "Logout button" button -->
+                <li><a class="getstarted scrollto" href="/signout">Sign Out</a></li>
+            {% else %}
+                <!-- User is not logged in, display "Get Started" button -->
+                <li><a class="getstarted scrollto" href="/signup">Get Started</a></li>
+            {% endif %}
+        </div>
+          
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
@@ -111,7 +112,7 @@
           <h1>Better Solutions For Your Banking-Process</h1>
           <h2>We are team of those people who are facing problems in banks</h2>
           <div class="d-flex justify-content-center justify-content-lg-start">
-            <a href="#about" class="btn-get-started scrollto">Get Started</a>
+            <a href="/signup" class="btn-get-started scrollto">Get Started</a>
             
           </div>
         </div>
@@ -258,7 +259,7 @@
                   <h4><a href="#">State Bank of India (SBI)</a></h4>
                   <p>Experience seamless banking with SBI. Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi.</p>
                   <div class="lol" style="padding-top: 15px;">
-                      <a href="./sbi-login.html"><button>Click Here</button></a></div>
+                      <a href="/login"><button>Click Here</button></a></div>
               </div>
           </div>
 
@@ -268,7 +269,7 @@
                   <h4><a href="#">Punjab National Bank (PNB)</a></h4>
                   <p>Bank with PNB for reliable services. Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi.</p>
                   <div class="lol" style="padding-top: 15px;">
-                      <a href="./pnb-login.html"><button>Click Here</button></a></div>
+                      <a href="/login"><button>Click Here</button></a></div>
               </div>
           </div>
 
@@ -276,9 +277,9 @@
               <div class="icon-box">
                   <div class="icon"><img style="width: 50px;" src="../static/axis.png" alt=""></div>
                   <h4><a href="#">Axis Bank</a></h4>
-                  <p>Bank-Line partners with Axis for cutting-edge financial solutions. Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi.</p>
+                  <p>Bank-Line partners with Axis for cutting-edge financial solutions.</p>
                   <div class="lol" style="padding-top: 15px;">
-                      <a href="./axis-login.html"><button>Click Here</button></a></div>
+                      <a href="/login"><button>Click Here</button></a></div>
               </div>
           </div>
 
@@ -286,9 +287,9 @@
               <div class="icon-box">
                   <div class="icon"><img style="width: 50px;" src="../static/cbi.png" alt=""></div>
                   <h4><a href="#">Central Bank of India (CBI)</a></h4>
-                  <p>Your financial trust is our priority. Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi.</p>
+                  <p>Your financial trust is our priority.</p>
                   <div class="lol" style="padding-top: 15px;">
-                      <a href="./cbi-login.html"><button>Click Here</button></a></div>
+                      <a href="/login"><button>Click Here</button></a></div>
               </div>
           </div>
       </div>
@@ -501,7 +502,7 @@
       </div>
 
       <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
-        <form action="your_backend_processing_script.php" method="post" role="form" class="php-email-form">
+        <form action="/message" method="post" role="form" class="php-email-form">
           <div class="row">
             <div class="form-group col-md-6">
               <label for="name">Your Name</label>

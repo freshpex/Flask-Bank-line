@@ -6,7 +6,7 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
   <link rel="icon" href="https://th.bing.com/th/id/OIP.iEljT-80HeVhxxkpjEEl2AHaEo?w=296&h=184&c=7&r=0&o=5&dpr=1.3&pid=1.7" type="image/png" sizes="16x16">
-  <title>Sigh up</title>
+  <title>Sign up</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -30,33 +30,26 @@
   <!-- Template Main CSS File -->
   <link href="../static/assets/css/style.css" rel="stylesheet">
   <link rel="stylesheet" href="../static/login.css">
-
-  <!-- =======================================================
-  * Template Name: Arsha - v4.9.0
-  * Template URL: https://bootstrapmade.com/arsha-free-bootstrap-html-template-corporate/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
 </head>
  
 <!-- ======= Header ======= -->
 <header id="header">
   <div class="container d-flex align-items-center">
 
-    <h1 class="logo me-auto"><a href=",.index.html">Bank-Line</a></h1>
+    <h1 class="logo me-auto"><a href="/">Bank-Line</a></h1>
      <a href="../static/index.html" class="logo me-auto"><img src="../static/assets/img/logo.png" alt="" class="img-fluid"></a>
 
     <nav id="navbar" class="navbar">
       <ul>
-        <li><a class="nav-link scrollto active" href="./index.html">Home</a></li>
-        <li><a class="nav-link scrollto" href="./index.html">About</a></li>
-        <li><a class="nav-link scrollto" href="./index.html">Services</a></li>
+        <li><a class="nav-link scrollto active" href="/">Home</a></li>
+        <li><a class="nav-link scrollto" href="/">About</a></li>
+        <li><a class="nav-link scrollto" href="/">Services</a></li>
 
-        <li><a class="nav-link scrollto" href="./index.html">Team</a></li>
+        <li><a class="nav-link scrollto" href="/">Team</a></li>
         <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
           <ul>
             <li><a href="#">Drop Down 1</a></li>
-            <li class="dropdown"><a href="./index.html"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
+            <li class="dropdown"><a href="/"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
               <ul>
                 <li><a href="#">Deep Drop Down 1</a></li>
                 <li><a href="#">Deep Drop Down 2</a></li>
@@ -70,8 +63,7 @@
             <li><a href="#">Drop Down 4</a></li>
           </ul>
         </li>
-        <li><a class="nav-link scrollto" href="./index.html">Contact</a></li>
-        <li><a class="getstarted scrollto" href="./index.html">Get Started</a></li>
+        <li><a class="nav-link scrollto" href="/">Contact</a></li>
       </ul>
       <i class="bi bi-list mobile-nav-toggle"></i>
     </nav> 
@@ -96,42 +88,35 @@
             <div class="col-md-7 col-lg-5">
                 <div class="wrap">
                         <img style="height: 100px; width: 100px; margin-top: 30px;" src="../static/signup.png" alt="">
-                    <div class="login-wrap p-4 p-md-5">
+                    <div class="login-wrap p-4 p-md-5">         
+                      <form action="/signup" method="post" class="signin-form">
                         
-                  
-                        <form action="#" class="signin-form">
                       <div class="form-group mt-3">
-                        <input type="text" class="form-control" name="user" id="user" autocomplete="off" required>
+                        <input type="text" class="form-control" name="username" id="username" autocomplete="off" required>
                         <span id="username" class="text-danger font-weight-bold"> </span>
                         <label class="form-control-placeholder" for="username">Username</label>
                       </div>
                       <div class="form-group mt-3">
-                          <input type="text" class="form-control" name="user" id="user" autocomplete="off" required>
+                          <input type="email" class="form-control" name="email" id="email" autocomplete="off" required>
                           <span id="username" class="text-danger font-weight-bold"> </span>
-                          <label class="form-control-placeholder" for="username">Email Id</label>
+                          <label class="form-control-placeholder" for="email">Email Id</label>
                       </div>
                       <div class="form-group mt-3">
-                          <input type="text" class="form-control" name="user" id="user" autocomplete="off" required>
+                          <input type="number" class="form-control" name="account" id="account" autocomplete="off" required>
                           <span id="username" class="text-danger font-weight-bold"> </span>
-                          <label class="form-control-placeholder" for="username">Bank Account No.</label>
+                          <label class="form-control-placeholder" for="account">Bank Account No.</label>
                       </div>
                       <div class="form-group mt-3">
-                          <input type="text" class="form-control" name="user" id="user" autocomplete="off" required>
+                          <input type="password" class="form-control" name="password" id="password" autocomplete="off" required>
                           <span id="username" class="text-danger font-weight-bold"> </span>
                           <label class="form-control-placeholder" for="username">Password</label>
                       </div>
-                <div class="form-group">
-                  <input id="password-field" type="password" class="form-control" name="user" id="user" autocomplete="off" required>
-                  <span id="username" class="text-danger font-weight-bold"> </span>
-                  <label class="form-control-placeholder" for="password">Confirm Password</label>
-                  <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span> 
-                </div>
-                <div class="form-group" style="margin-right: 40px;">
-                  <button type="submit" class=" btn btn-primary rounded submit px-3">  <a href="./click_here1.html"> Sign up </a></button>
-                 </div>
-                <div class="form-group d-md-flex" style="cursor: pointer;">                   
+                      <div class="form-group" style="margin-right: 40px;">
+                        <button type="submit" class=" btn btn-primary rounded submit px-3"> Sign up </button>
+                      </div>
+                      <div class="form-group d-md-flex" style="cursor: pointer;">                   
               </form>
-              
+              <p class="text" style="text-align: center;" >Already have an account? <a data-toggle="tab" href="/login">Sign in</a></p>
             
           </div>
             </div>
