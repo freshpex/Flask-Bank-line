@@ -71,7 +71,7 @@
 <br><br><br>
   <!-- <div class="col-xl-3 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100"> -->
     <a href="./click_here1.html"><img class="kol" data-aos="zoom-in" data-aos-delay="100" style="width: 150px;" src="../static/sbi.jpg" alt=""><br>
-      <h1 id="pp" data-aos="zoom-in" data-aos-delay="100" style="color: white;">WELCOME TO SBI BANK</h1></a>
+      <h1 id="pp" data-aos="zoom-in" data-aos-delay="100" style="color: white;">WELCOME {{ g.user.username }}!</h1></a>
   <!-- </div> -->
   
   <section>
@@ -104,6 +104,17 @@
       </div>
     </div>
   </div>
+
+  <ul>
+    {% for account in user_accounts %}
+        <li>Account Number: {{ account.account_number }}</li>
+        <li>Account Type: {{ account.account_type }}</li>
+        <li><a href="{{ url_for('loan_history', account_number=account.account_number) }}">Loan History</a></li>
+    {% endfor %}
+</ul>
+
+<h2>Transaction History:</h2>
+<a href="{{ url_for('history') }}">View Transaction History</a>
   
 </div>
   </section>

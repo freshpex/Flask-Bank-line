@@ -1,10 +1,13 @@
-from flask import Flask, render_template, request, g, session, jsonify, url_for, redirect, flash, send_from_directory
-import sqlite3, requests, hashlib, os, warnings, requests, datetime
+from flask import Flask, render_template, request, g, session, url_for, redirect, flash, send_from_directory
+import sqlite3, hashlib, os, requests
 from werkzeug.utils import secure_filename
+from model import db, User, Transaction, Receipt, Loan
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(16)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 DATABASE_FILE = 'database.db'
+db.init_app(app)
 
 # Function handling the hash password
 def hash_password(password):
@@ -23,7 +26,7 @@ def check_password(password, password_hash):
 
 
 def get_user(user_id):
-    query = "SELECT id, email, first_name, last_name, username, gender, account, password_hash, notification_enabled, privacy_enabled FROM users WHERE id = ?"
+    query = "SELECT id, email, firstname, lastname, username, gender, account, password, notification_enabled, privacy_enabled, profile_image, account_type FROM user WHERE id = ?"
     args = (user_id,)
     row = db_query(query, args)
 
@@ -31,7 +34,7 @@ def get_user(user_id):
         return None
 
     return {
-        'id': row[0][0], 'email': row[0][1], 'first_name': row[0][2], 'last_name': row[0][3], 'username': row[0][4], 'gender': row[0][5], 'account': row[0][6], 'password': row[0][7], 'notification_enabled': bool(row[0][8]), 'privacy_enabled': bool(row[0][9])
+        'id': row[0][0], 'email': row[0][1], 'firstname': row[0][2], 'lastname': row[0][3], 'username': row[0][4], 'gender': row[0][5], 'account': row[0][10], 'password': row[0][11], 'notification_enabled': bool(row[0][7]), 'privacy_enabled': bool(row[0][6]), 'account_type': row[0][9]
     }
 
 
@@ -74,7 +77,7 @@ def db_execute(query, args=()):
 
 def check_user_exists(email, username):
     # Check if user with the given email or username exists
-    query = "SELECT id FROM users WHERE email = ? OR username = ?"
+    query = "SELECT id FROM user WHERE email = ? OR username = ?"
     args = (email, username)
     user = db_query(query, args)
 
@@ -99,7 +102,7 @@ def signup():
         password_hash = hash_password(password)
 
         # Insert user into the database
-        query = "INSERT INTO users (email, username, account, password_hash) VALUES (?, ?, ?, ?)"
+        query = "INSERT INTO user (email, username, account, password) VALUES (?, ?, ?, ?)"
         args = (email, username, account, password_hash)
 
         db_execute(query, args)
@@ -118,7 +121,7 @@ def login():
         password = request.form['password']
 
         # Check if user exists in database
-        query = "SELECT id, password_hash FROM users WHERE username = ?"
+        query = "SELECT id, password FROM user WHERE username = ?"
         args = (username,)
         row = db_query(query, args)
 
@@ -163,7 +166,8 @@ def index():
 def dashboard():
     if g.user is None:
         return redirect(url_for('login'))
-    return render_template('dashboard.html')
+    user_accounts = User.query.filter_by(id=g.user['id']).all()
+    return render_template('dashboard.html', user_accounts=user_accounts)
 
 @app.route('/products')
 def products():
@@ -171,10 +175,38 @@ def products():
         return redirect(url_for('login'))
     return render_template('products.html')
 
-@app.route('/createaccount')
+@app.route('/createaccount', methods=['GET', 'POST'])
 def createaccount():
     if g.user is None:
         return redirect(url_for('login'))
+    if request.method == 'POST':
+        fname = request.form['fname']
+        lname = request.form['lname']
+        gender = request.form['gender']
+        profile = request.files['profile']
+        email = request.form['email']
+        username = request.form['username']
+        account_type = request.form['account_type']
+
+        # Create a new user instance
+        new_user = User(
+            email=email,
+            username=username,
+            account_type=account_type,
+            firstname=fname,
+            lastname=lname,
+            gender=gender,
+            profile_image=profile
+        )
+
+        # Add the user to the database
+        db.session.add(new_user)
+        db.session.commit()
+
+        # Redirect to account page
+        return redirect(url_for('account'))
+
+    # Render the createaccount page
     return render_template('createaccount.html')
 
 @app.route('/accounts')
@@ -199,8 +231,116 @@ def feedbacks():
 def history():
     if g.user is None:
         return redirect(url_for('login'))
-    return render_template('history.html')
 
+    user_transactions = Transaction.query.filter_by(user_id=g.user['id']).all()
+    return render_template('history.html', user_transactions=user_transactions)
+
+# Route for viewing receipt
+@app.route('/view_receipt/<int:transaction_id>')
+def view_receipt(transaction_id):
+    if g.user is None:
+        return redirect(url_for('login'))
+
+    # Fetch the specific transaction
+    transaction = Transaction.query.get(transaction_id)
+    return render_template('view_receipt.html', transaction=transaction)
+
+def process_transaction_logic(source_account, amount, description, transaction_type, destination_country=None, currency=None):
+    # Assuming you have a User model and a Transaction model in your application
+    user = User.query.filter_by(account_number=source_account).first()
+
+    if not user:
+        return render_template('error.html', error_message='Invalid source account.')
+
+    # Assuming your User model has a balance field
+    if user.balance < amount:
+        return render_template('error.html', error_message='Insufficient funds.')
+
+    # Update the user's balance
+    user.balance -= amount
+
+    # Create a new transaction record
+    new_transaction = Transaction(
+        description=description,
+        amount=-amount,  # Deduct amount for debiting the account
+        user_id=user.id
+    )
+
+    db.session.add(new_transaction)
+    db.session.commit()
+
+    # Additional logic for international transfer
+    if transaction_type == 'international':
+        # Handle additional international transfer logic
+        # This might include exchange rate calculations, fees, etc.
+        # For simplicity, let's assume a fixed fee for international transfers
+        international_fee = 10.0  # Replace with your actual fee
+        amount -= international_fee
+
+    # Update the user's balance after deducting the international fee
+    user.balance -= international_fee if transaction_type == 'international' else 0
+
+    # Assuming you have a Receipt model
+    new_receipt = Receipt(
+        transaction_id=new_transaction.id,
+        amount=amount,
+        description=description,
+        destination_country=destination_country,
+        currency=currency
+    )
+
+    db.session.add(new_receipt)
+    db.session.commit()
+
+    # Redirect to the transaction history page or generate receipt
+    return render_template('confirmation.html', confirmation_message=f"Transaction successfully processed. Receipt ID: {new_receipt.id}")
+
+
+# Route for processing transactions
+@app.route('/process_transaction', methods=['POST'])
+def process_transaction():
+    if g.user is None:
+        return redirect(url_for('login'))
+
+    transaction_type = request.form.get('transaction_type')
+    source_account = request.form.get('source_account')
+    amount = float(request.form.get('amount'))
+    description = request.form.get('description')
+
+    destination_country = None
+    currency = None
+
+    if transaction_type == 'international':
+        destination_country = request.form.get('destination_country')
+        currency = request.form.get('currency')
+
+        # Add logic for international transfer fields handling
+        # Example: You may want to check exchange rates, apply fees, etc.
+        # For simplicity, let's assume a fixed fee for international transfers
+        international_fee = 10.0  # Replace with your actual fee
+
+        # Deduct the international fee from the transfer amount
+        amount -= international_fee
+
+    # Check if the user has multiple accounts
+    user_accounts = User.query.filter_by(id=g.user['id']).all()
+
+    if len(user_accounts) > 1:
+        # If the user has multiple accounts, ask which account to use
+        return render_template('process_transaction.html', user_accounts=user_accounts, amount=amount, description=description, transaction_type=transaction_type, source_account=source_account, destination_country=destination_country, currency=currency)
+    
+    # If the user has only one account, proceed to process the transaction
+    return process_transaction_logic(source_account, amount, description, transaction_type, destination_country, currency)
+
+@app.route('/loan_history/<int:account_number>')
+def loan_history(account_number):
+    if g.user is None:
+        return redirect(url_for('login'))
+
+    # Placeholder logic: Fetch loan history based on the account number
+    loan_history = Loan.query.filter_by(account_number=account_number).all()
+
+    return render_template('loan_history.html', account_number=account_number, loan_history=loan_history)
     
 
 if __name__ == '__main__':

@@ -72,30 +72,14 @@ background: #3bb986;
 
     <nav id="navbar" class="navbar">
       <ul>
-        <li><a class="nav-link scrollto active" href="./index.html">Home</a></li>
-        <li><a class="nav-link scrollto" href="./index.html">About</a></li>
-        <li><a class="nav-link scrollto" href="./index.html">Services</a></li>
-
-        <li><a class="nav-link scrollto" href="./index.html">Team</a></li>
-        <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
-          <ul>
-            <li><a href="#">Drop Down 1</a></li>
-            <li class="dropdown"><a href="./index.html"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
-              <ul>
-                <li><a href="#">Deep Drop Down 1</a></li>
-                <li><a href="#">Deep Drop Down 2</a></li>
-                <li><a href="#">Deep Drop Down 3</a></li>
-                <li><a href="#">Deep Drop Down 4</a></li>
-                <li><a href="#">Deep Drop Down 5</a></li>
-              </ul>
-            </li>
-            <li><a href="#">Drop Down 2</a></li>
-            <li><a href="#">Drop Down 3</a></li>
-            <li><a href="#">Drop Down 4</a></li>
-          </ul>
-        </li>
-        <li><a class="nav-link scrollto" href="./index.html">Contact</a></li>
-        <li><a class="getstarted scrollto" href="./index.html">Get Started</a></li>
+        <li><a class="nav-link scrollto active" href="/dashboard">Home</a></li>
+        <li><a class="nav-link scrollto" href="/products">Products</a></li>
+        <li><a class="nav-link scrollto" href="/createaccount">Create Account</a></li>
+        <li><a class="nav-link scrollto" href="/accounts">My Accounts</a></li>
+        <li><a class="nav-link scrollto" href="/cardpayment">Card Payment</a></li>
+        <li><a class="nav-link scrollto" href="/feedbacks">My FeedBacks</a></li>
+        <li><a class="nav-link scrollto" href="/history">Transaction History</a></li>
+        <li><a class="getstarted scrollto" href="/signout">Sign Out</a></li>
       </ul>
       <i class="bi bi-list mobile-nav-toggle"></i>
     </nav><!-- .navbar -->
@@ -116,30 +100,52 @@ width: 150px;
 </video> 
 
   
-<a href="./deposite4.html"><img class="kol1" data-aos="zoom-in" data-aos-delay="100" style="width: 150px;" src="../static/cbi.png" alt=""><br>
-  <h1 id="pp" data-aos="zoom-in" data-aos-delay="100" style="color: rgb(247, 247, 247);">Deposite Form</h1></a> <hr style="color: white;">
-<br>
-    <img data-aos="zoom-in" data-aos-delay="300" src="../static/cbi-check.jpg" alt=""> <br> 
-  <div class="input-group" style="width: 150px;">
-    <span class="input-group-btn">
-        <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="quant[2]">
-          <span class="glyphicon glyphicon-minus"></span>
-        </button>
-    </span>
-    <input type="text" name="quant[2]" class="form-control input-number" value="1" min="1" max="100">
-    <span class="input-group-btn">
-        <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]">
-            <span class="glyphicon glyphicon-plus"></span>
-        </button>
-    </span>
-</div>
-<br><br><br><br>
-    <hr style="color: white;">
-    <h2  id="h2" style="text-align: center;" data-aos="zoom-in" data-aos-delay="200">Please Fill The Form</h2>
+<!-- templates/transaction.html -->
+<form method="POST" action="{{ url_for('process_transaction') }}">
+  <label for="transaction_type">Transaction Type:</label>
+  <select name="transaction_type" id="transaction_type" required>
+      <option value="local">Local Transfer</option>
+      <option value="international">International Transfer</option>
+  </select>
 
-  <br><br><br>
+  <div id="international_fields" style="display: none;">
+      <label for="destination_country">Destination Country:</label>
+      <select name="destination_country" required>
+          <option value="us">United States</option>
+          <option value="uk">United Kingdom</option>
+          <!-- Add other popular countries -->
+      </select>
 
-  <a href="./verification1.html"><button  style="width: 100px;" height="100px"  >Save & continue</button></a>
+      <label for="currency">Currency:</label>
+      <select name="currency" required>
+          <option value="usd">US Dollar (USD)</option>
+          <option value="gbp">British Pound (GBP)</option>
+          <!-- Add other common currencies -->
+      </select>
+  </div>
+
+  <!-- Add other necessary fields for the transaction -->
+
+  <label for="source_account">Source Account:</label>
+  <select name="source_account" required>
+      {% for account in user_accounts %}
+          <option value="{{ account.account_number }}">{{ account.account_number }}</option>
+      {% endfor %}
+  </select>
+
+  <button type="submit">Submit Transaction</button>
+</form>
+
+<script>
+  document.getElementById('transaction_type').addEventListener('change', function() {
+      var internationalFields = document.getElementById('international_fields');
+      if (this.value === 'international') {
+          internationalFields.style.display = 'block';
+      } else {
+          internationalFields.style.display = 'none';
+      }
+  });
+</script>
 
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
