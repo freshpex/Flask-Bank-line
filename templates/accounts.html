@@ -113,6 +113,26 @@ width: 150px;
  <video autoplay muted loop id="myVideo">
   <source src="../static/video5.mp4" type="video/mp4">
 </video> 
+<<<<<<< HEAD
+=======
+    <br><br><br><br>
+    <main>
+      <section>
+        <div class="dish">
+          <h1>Accounts</h1>
+          <ul>
+              {% for account in user_accounts %}
+                  <li>
+                      <strong>Account Number:</strong> {{ account.account_number }}<br> <!-- Changed 'account' to 'account_number' -->
+                      <strong>Account Type:</strong> {{ account.account_type }}<br>
+                      <strong>Balance:</strong> {{ account.balance }}<br>
+                  </li>
+              {% endfor %}
+          </ul>
+        </div>
+      </section>
+    </main>
+>>>>>>> e02bd4a (add styles)
 
 <<<<<<< HEAD
   
