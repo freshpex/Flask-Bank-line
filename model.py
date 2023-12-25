@@ -29,7 +29,8 @@ class Account(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     account_number = db.Column(db.Integer, unique=True, default=lambda: random.randint(10000000000, 99999999999))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    account_type = db.Column(db.String(10))  # Add this line
+    account_type = db.Column(db.String(10))
+    balance = db.Column(db.Integer)
 
 class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)

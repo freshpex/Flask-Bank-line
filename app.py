@@ -170,13 +170,6 @@ def dashboard():
     user_accounts = Account.query.filter_by(user_id=g.user['id']).all()
     return render_template('dashboard.html', user_accounts=user_accounts)
 
-@app.route('/transaction')
-def transaction():
-    if g.user is None:
-        return redirect(url_for('login'))
-    user_accounts = User.query.filter_by(id=g.user['id']).all()
-    return render_template('transaction.html', user_accounts=user_accounts)
-
 @app.route('/products')
 def products():
     if g.user is None:
@@ -248,6 +241,13 @@ def feedbacks():
         return redirect(url_for('login'))
     return render_template('feedbacks.html')
 
+@app.route('/transaction')
+def transaction():
+    if g.user is None:
+        return redirect(url_for('login'))
+    user_accounts = User.query.filter_by(id=g.user['id']).all()
+    return render_template('transaction.html', user_accounts=user_accounts)
+
 @app.route('/history')
 def history():
     if g.user is None:
@@ -256,52 +256,39 @@ def history():
     user_transactions = Transaction.query.filter_by(user_id=g.user['id']).all()
     return render_template('history.html', user_transactions=user_transactions)
 
-# Route for viewing receipt
 @app.route('/view_receipt/<int:transaction_id>')
 def view_receipt(transaction_id):
     if g.user is None:
         return redirect(url_for('login'))
 
-    # Fetch the specific transaction
     transaction = Transaction.query.get(transaction_id)
     return render_template('view_receipt.html', transaction=transaction)
 
-def process_transaction_logic(source_account, amount, description, transaction_type, destination_country=None, currency=None):
-    # Assuming you have a User model and a Transaction model in your application
-    user = User.query.filter_by(account_number=source_account).first()
+def process_transaction_logic(account_id, amount, description, transaction_type, destination_country=None, currency=None):
+    account = Account.query.get(account_id)
 
-    if not user:
+    if not account:
         return render_template('error.html', error_message='Invalid source account.')
 
-    # Assuming your User model has a balance field
-    if user.balance < amount:
+    if account.balance < amount:
         return render_template('error.html', error_message='Insufficient funds.')
 
-    # Update the user's balance
-    user.balance -= amount
+    account.balance -= amount
 
-    # Create a new transaction record
     new_transaction = Transaction(
         description=description,
-        amount=-amount,  # Deduct amount for debiting the account
-        user_id=user.id
+        amount=-amount,
+        user_id=account.user_id
     )
 
     db.session.add(new_transaction)
     db.session.commit()
 
-    # Additional logic for international transfer
     if transaction_type == 'international':
-        # Handle additional international transfer logic
-        # This might include exchange rate calculations, fees, etc.
-        # For simplicity, let's assume a fixed fee for international transfers
-        international_fee = 10.0  # Replace with your actual fee
+        international_fee = 10.0 
         amount -= international_fee
 
-    # Update the user's balance after deducting the international fee
-    user.balance -= international_fee if transaction_type == 'international' else 0
-
-    # Assuming you have a Receipt model
+    account.balance -= international_fee if transaction_type == 'international' else 0
     new_receipt = Receipt(
         transaction_id=new_transaction.id,
         amount=amount,
@@ -312,8 +299,6 @@ def process_transaction_logic(source_account, amount, description, transaction_t
 
     db.session.add(new_receipt)
     db.session.commit()
-
-    # Redirect to the transaction history page or generate receipt
     return render_template('confirmation.html', confirmation_message=f"Transaction successfully processed. Receipt ID: {new_receipt.id}")
 
 
@@ -324,45 +309,79 @@ def process_transaction():
         return redirect(url_for('login'))
 
     transaction_type = request.form.get('transaction_type')
-    source_account = request.form.get('source_account')
+    account_id = request.form.get('source_account')
     amount = float(request.form.get('amount'))
     description = request.form.get('description')
-
     destination_country = None
     currency = None
 
     if transaction_type == 'international':
         destination_country = request.form.get('destination_country')
         currency = request.form.get('currency')
-
-        # Add logic for international transfer fields handling
-        # Example: You may want to check exchange rates, apply fees, etc.
-        # For simplicity, let's assume a fixed fee for international transfers
-        international_fee = 10.0  # Replace with your actual fee
-
-        # Deduct the international fee from the transfer amount
+        international_fee = 10.0         
         amount -= international_fee
-
-    # Check if the user has multiple accounts
-    user_accounts = User.query.filter_by(id=g.user['id']).all()
+        
+    user_accounts = Account.query.filter_by(user_id=g.user['id']).all() 
 
     if len(user_accounts) > 1:
-        # If the user has multiple accounts, ask which account to use
-        return render_template('process_transaction.html', user_accounts=user_accounts, amount=amount, description=description, transaction_type=transaction_type, source_account=source_account, destination_country=destination_country, currency=currency)
-    
-    # If the user has only one account, proceed to process the transaction
-    return process_transaction_logic(source_account, amount, description, transaction_type, destination_country, currency)
+        return render_template('process_transaction.html', user_accounts=user_accounts, amount=amount, description=description, transaction_type=transaction_type, source_account=account_id, destination_country=destination_country, currency=currency)  
+    return process_transaction_logic(account_id, amount, description, transaction_type, destination_country, currency)
 
-@app.route('/loan_history/<int:account_number>')
-def loan_history(account_number):
+@app.route('/loan_history/<int:account_id>')
+def loan_history(account_id):
     if g.user is None:
         return redirect(url_for('login'))
 
-    # Placeholder logic: Fetch loan history based on the account number
-    loan_history = Loan.query.filter_by(account_number=account_number).all()
+    loan_history = Loan.query.filter_by(account_id=account_id).all()
+    return render_template('loan_history.html', account_id=account_id, loan_history=loan_history)
 
-    return render_template('loan_history.html', account_number=account_number, loan_history=loan_history)
+@app.route('/request_loan', methods=['GET', 'POST'])
+def request_loan():
+    if g.user is None:
+        return redirect(url_for('login'))
     
+    if request.method == 'POST':
+        account_id = request.form.get('account_id')
+        amount = float(request.form.get('amount'))
+
+        # Create a new loan request
+        new_loan = Loan(account_id=account_id, amount=amount, status='pending')
+
+        # Add the loan request to the database
+        db.session.add(new_loan)
+        db.session.commit()
+
+        # Redirect to loan history page
+        return redirect(url_for('loan_history', account_id=account_id))
+
+    # Render the loan request page
+    return render_template('request_loan.html')
+
+@app.route('/deposit', methods=['GET', 'POST'])
+def deposit():
+    if g.user is None:
+        return redirect(url_for('login'))
+    
+    if request.method == 'POST':
+        account_id = request.form.get('account_id')
+        amount = float(request.form.get('amount'))
+
+        # Fetch the account
+        account = Account.query.get(account_id)
+
+        # Update the account balance
+        account.balance += amount
+
+        # Commit the changes to the database
+        db.session.commit()
+
+        # Redirect to accounts page
+        return redirect(url_for('accounts'))
+
+    # Render the deposit page
+    return render_template('deposit.html')
+
+
 @app.errorhandler(400)
 def handle_bad_request(e):
     return 'Bad Request: {0}'.format(e.description), 400
