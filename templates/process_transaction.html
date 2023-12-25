@@ -92,7 +92,7 @@ background: #3bb986;
   <section id="breadcrumbs" class="breadcrumbs">
 
              <!-- templates/process_transaction.html -->
-             <form method="POST" action="{{ url_for('process_transaction_logic') }}">
+             <form method="POST" action="{{ url_for('process_double_transaction') }}">
               <h1>Process Transaction</h1>
               <label for="source_account">Select the account ID:</label> <!-- Change 'Select the account' to 'Select the account ID' -->
               <select name="source_account" required>

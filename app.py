@@ -268,6 +268,8 @@ def view_receipt(transaction_id):
     transaction = Transaction.query.get(transaction_id)
     return render_template('view_receipt.html', transaction=transaction)
 
+# Route for processing transactions
+@app.route('/process_transaction_logic', methods=['POST'])
 def process_transaction_logic(account_id, amount, description, transaction_type, destination_country=None, currency=None):
     account = Account.query.get(account_id)
     international_fee = INTERNATIONAL_FEE
@@ -320,6 +322,8 @@ def process_transaction():
     description = request.form.get('description')
     destination_country = request.form.get('destination_country')
     currency = request.form.get('currency')
+    acc_number = request.form.get('acc_number')
+    acc_name = request.form.get('acc_name')
 
     if transaction_type == 'international':
         destination_country = request.form.get('destination_country')
@@ -332,6 +336,23 @@ def process_transaction():
     if len(user_accounts) > 1:
         return render_template('process_transaction.html', user_accounts=user_accounts, amount=amount, description=description, transaction_type=transaction_type, source_account=account_id, destination_country=destination_country, currency=currency) 
     return process_transaction_logic(account_id, amount, description, transaction_type, destination_country, currency)
+
+# Route for processing transactions
+@app.route('/process_double_transaction', methods=['POST'])
+def process_double_transaction():
+    if g.user is None:
+        return redirect(url_for('login'))
+
+    transaction_type = request.form.get('transaction_type')
+    account_id = request.form.get('source_account')
+    amount = float(request.form.get('amount'))
+    description = request.form.get('description')
+    destination_country = request.form.get('destination_country')
+    currency = request.form.get('currency')
+    acc_number = request.form.get('acc_number')
+    acc_name = request.form.get('acc_name')
+    return process_transaction_logic(account_id, amount, description, transaction_type, destination_country, currency)
+
 
 @app.route('/loan_history/<int:account_id>')
 def loan_history(account_id):
