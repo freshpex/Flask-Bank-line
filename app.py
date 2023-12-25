@@ -1,6 +1,12 @@
 from flask import Flask, render_template, request, g, session, jsonify, url_for, redirect, flash, send_from_directory
 import sqlite3, requests, hashlib, os, warnings, requests, datetime
 from werkzeug.utils import secure_filename
+<<<<<<< HEAD
+=======
+from model import db, User, Transaction, Receipt, Loan, Account
+from flask_migrate import Migrate
+from config import INTERNATIONAL_FEE
+>>>>>>> bf8bbb6 (Add background)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(16)
@@ -10,6 +16,7 @@ DATABASE_FILE = 'database.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 DATABASE_FILE = 'instance/database.db'
 
+migrate = Migrate(app, db)
 db.init_app(app)
 >>>>>>> 9b64c7a (work flow)
 
@@ -248,7 +255,149 @@ def history():
         return redirect(url_for('login'))
     return render_template('history.html')
 
+<<<<<<< HEAD
     
+=======
+    user_transactions = Transaction.query.filter_by(user_id=g.user['id']).all()
+    return render_template('history.html', user_transactions=user_transactions)
+
+@app.route('/view_receipt/<int:transaction_id>')
+def view_receipt(transaction_id):
+    if g.user is None:
+        return redirect(url_for('login'))
+
+    transaction = Transaction.query.get(transaction_id)
+    return render_template('view_receipt.html', transaction=transaction)
+
+def process_transaction_logic(account_id, amount, description, transaction_type, destination_country=None, currency=None):
+    account = Account.query.get(account_id)
+
+    if not account:
+        return render_template('error.html', error_message='Invalid source account.')
+
+    # Get the transaction type (debit or credit) based on the amount sign
+    transaction_type = 'debit' if amount < 0 else 'credit'
+
+    # Apply the international fee to the amount if the transaction type is 'international'
+    if transaction_type == 'international':
+        amount -= INTERNATIONAL_FEE
+
+    # Check if the account has sufficient funds
+    if account.balance < amount:
+        return render_template('error.html', error_message='Insufficient funds.')
+
+    # Deduct the amount from the account balance
+    account.balance -= amount
+
+    # Create a new transaction object with a positive amount value and the transaction type
+    new_transaction = Transaction(
+        description=description,
+        amount=abs(amount),
+        transaction_type=transaction_type,
+        user_id=account.user_id
+    )
+
+    db.session.add(new_transaction)
+    db.session.commit()
+
+    # Create a new receipt object with the relevant information
+    new_receipt = Receipt(
+        transaction_id=new_transaction.id,
+        amount=amount,
+        description=description,
+        destination_country=destination_country,
+        currency=currency
+    )
+
+    db.session.add(new_receipt)
+    db.session.commit()
+    return render_template('confirmation.html', confirmation_message=f"Transaction successfully processed. Receipt ID: {new_receipt.id}")
+
+
+# Route for processing transactions
+@app.route('/process_transaction', methods=['POST'])
+def process_transaction():
+    if g.user is None:
+        return redirect(url_for('login'))
+
+    # Get the account ID and the transaction type from the request form
+    account_id = request.form.get('source_account')
+    transaction_type = request.form.get('transaction_type')
+
+    # Query the user accounts only once and store the result in a variable
+    user_accounts = Account.query.filter_by(user_id=g.user['id']).all() 
+
+    if len(user_accounts) > 1:
+        return render_template('process_transaction.html', user_accounts=user_accounts, transaction_type=transaction_type, source_account=account_id) 
+    return process_transaction_logic(account_id, transaction_type)
+
+@app.route('/loan_history/<int:account_id>')
+def loan_history(account_id):
+    if g.user is None:
+        return redirect(url_for('login'))
+
+    loan_history = Loan.query.filter_by(account_id=account_id).all()
+    return render_template('loan_history.html', account_id=account_id, loan_history=loan_history)
+
+@app.route('/request_loan', methods=['GET', 'POST'])
+def request_loan():
+    if g.user is None:
+        return redirect(url_for('login'))
+    
+    if request.method == 'POST':
+        account_id = request.form.get('account_id')
+        amount = float(request.form.get('amount'))
+
+        # Create a new loan request
+        new_loan = Loan(account_id=account_id, amount=amount, status='pending')
+
+        # Add the loan request to the database
+        db.session.add(new_loan)
+        db.session.commit()
+
+        # Redirect to loan history page
+        return redirect(url_for('loan_history', account_id=account_id))
+
+    # Render the loan request page
+    return render_template('request_loan.html')
+
+@app.route('/deposit', methods=['GET', 'POST'])
+def deposit():
+    if g.user is None:
+        return redirect(url_for('login'))
+    
+    if request.method == 'POST':
+        # Get form data
+        amount = float(request.form['amount'])
+        account_id = int(request.form['account_id'])
+
+        # Fetch the user's account
+        account = Account.query.filter_by(id=account_id).first()
+
+        if not account:
+            return render_template('error.html', error_message='Invalid account.')
+
+        # Ensure that account.balance is initialized to 0.0 if it's None
+        if account.balance is None:
+            account.balance = 0.0
+
+        # Perform the deposit
+        account.balance += amount
+
+        # Create a new transaction record
+        new_transaction = Transaction(
+            description='Deposit',
+            amount=amount,
+            user_id=g.user['id']
+        )
+
+        db.session.add(new_transaction)
+        db.session.commit()
+
+        return render_template('confirmation.html', confirmation_message=f"Deposit of {amount} successfully processed.")
+    return render_template('deposit.html')
+
+>>>>>>> bf8bbb6 (Add background)
 @app.errorhandler(400)
 def handle_bad_request(e):
     return 'Bad Request: {0}'.format(e.description), 400

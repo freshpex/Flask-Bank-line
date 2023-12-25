@@ -52,55 +52,24 @@
 </header><!-- End Header -->
 <body>
 
+    <br><br><br><br><br><br><br>
+    <main>
+      <main>
+        <section id="breadcrumbs" class="breadcrumbs">
+          <form method="POST" action="/deposit">
+              <label for="account_id">Account ID:</label>
+              <input type="text" name="account_id" required>
   
- <br><br><br><br><br><br>
- <main>
-  <section id="breadcrumbs" class="breadcrumbs">
-        <!-- templates/confirm_transaction.html -->
-        <form method="POST" action="{{ url_for('process_transaction') }}">
-          <h1>Confirm Transaction</h1>
-          <p><strong>Source Account ID:</strong> {{ source_account }}</p> <!-- Change 'Source Account' to 'Source Account ID' -->
-          <p><strong>Amount:</strong> {{ amount }}</p>
-          <p><strong>Description:</strong> {{ description }}</p>
-          <p><strong>Transaction Type:</strong> {{ transaction_type }}</p>
-          <button type="submit">Confirm and Process Transaction</button>
-      </form>          
-
-    </section>
+              <label for="amount">Amount:</label>
+              <input type="number" name="amount" required>
+  
+              <button type="submit">Deposit</button>
+          </form>
+      </section>
   </main>
-  <!-- ======= Footer ======= -->
-  <footer id="footer">
+  
 
-   
 
-    <div class="footer-top">
-      <div class="container">
-        <div class="row">
-
-          <div class="col-lg-3 col-md-6 footer-contact">
-            <h3>Bank-Line</h3>
-            <p>
-              Kolkata <br>
-             
-              India <br><br>
-              <strong>Phone:</strong> +1 5589 55488 55<br>
-              <strong>Email:</strong> codeboom471@gmail.com<br>
-            </p>
-          </div>
-
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Useful Links</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
    <!-- ======= Footer ======= -->
    <footer id="footer">
 

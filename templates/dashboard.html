@@ -69,9 +69,14 @@
 </video> 
 <!-- <div class="row1" style="margin-top: 50px;"> -->
 <br><br><br>
+<<<<<<< HEAD
   <!-- <div class="col-xl-3 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100"> -->
     <a href="./click_here1.html"><img class="kol" data-aos="zoom-in" data-aos-delay="100" style="width: 150px;" src="../static/sbi.jpg" alt=""><br>
       <h1 id="pp" data-aos="zoom-in" data-aos-delay="100" style="color: white;">WELCOME TO SBI BANK</h1></a>
+=======
+  <!-- <div class="col-xl-3 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100"> --><br>
+      <h1 id="pp" data-aos="zoom-in" data-aos-delay="100" style="color: white;">Welcome {{ g.user.username }}!</h1></a>
+>>>>>>> bf8bbb6 (Add background)
   <!-- </div> -->
   
   <section>
@@ -115,7 +120,11 @@
           {% for account in user_accounts %}
               <li>Account Number: {{ account.account }}</li>
               <li>Account Type: {{ account.account_type }}</li>
+<<<<<<< HEAD
               <button ><a href="{{ url_for('loan_history', account_number=account.account) }}">Loan History</a></button>
+=======
+              <button ><a href="{{ url_for('loan_history', account_id=account.id) }}">Loan History</a></button>
+>>>>>>> bf8bbb6 (Add background)
           {% endfor %}
       </ul>
 
