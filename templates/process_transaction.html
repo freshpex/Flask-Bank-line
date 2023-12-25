@@ -99,37 +99,29 @@ width: 150px;
 </video> 
 
              <!-- templates/process_transaction.html -->
-            <form method="POST" action="{{ url_for('process_transaction_logic') }}">
-                <h1>Process Transaction</h1>
-
-                <label for="source_account">Select the account:</label>
-                <select name="source_account" required>
-                    {% for account in user_accounts %}
-                        <option value="{{ account.account_number }}">{{ account.account_number }}</option>
-                    {% endfor %}
-                </select>
-
-                <p><strong>Amount:</strong> {{ amount }}</p>
-                <p><strong>Description:</strong> {{ description }}</p>
-                <p><strong>Transaction Type:</strong> {{ transaction_type }}</p>
-
-                {% if transaction_type == 'international' %}
-                    <label for="destination_country">Destination Country:</label>
-                    <input type="text" name="destination_country" required>
-
-                    <label for="currency">Currency:</label>
-                    <input type="text" name="currency" required>
-                {% endif %}
-
-                <input type="hidden" name="amount" value="{{ amount }}">
-                <input type="hidden" name="description" value="{{ description }}">
-                <input type="hidden" name="transaction_type" value="{{ transaction_type }}">
-
-                <button type="submit">Confirm Transaction</button>
-            </form>
-
-
-
+             <form method="POST" action="{{ url_for('process_transaction_logic') }}">
+              <h1>Process Transaction</h1>
+              <label for="source_account">Select the account ID:</label> <!-- Change 'Select the account' to 'Select the account ID' -->
+              <select name="source_account" required>
+                  {% for account in user_accounts %}
+                      <option value="{{ account.id }}">{{ account.id }}</option> <!-- Change 'account.account' to 'account.id' -->
+                  {% endfor %}
+              </select>
+              <p><strong>Amount:</strong> {{ amount }}</p>
+              <p><strong>Description:</strong> {{ description }}</p>
+              <p><strong>Transaction Type:</strong> {{ transaction_type }}</p>
+              {% if transaction_type == 'international' %}
+                  <label for="destination_country">Destination Country:</label>
+                  <input type="text" name="destination_country" required>
+                  <label for="currency">Currency:</label>
+                  <input type="text" name="currency" required>
+              {% endif %}
+              <input type="hidden" name="amount" value="{{ amount }}">
+              <input type="hidden" name="description" value="{{ description }}">
+              <input type="hidden" name="transaction_type" value="{{ transaction_type }}">
+              <button type="submit">Confirm Transaction</button>
+          </form>
+          
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>

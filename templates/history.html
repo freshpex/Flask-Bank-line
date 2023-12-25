@@ -69,21 +69,19 @@
 </video> 
 <!-- <div class="row1" style="margin-top: 50px;"> -->
 <br><br><br>
-  <!-- <div class="col-xl-3 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100"> -->
-   <!-- transaction_history.html -->
-<!-- templates/transaction_history.html -->
-<h1>Transaction History</h1>
 
-<ul>
-    {% for transaction in user_transactions %}
-        <li>
-            <strong>Date:</strong> {{ transaction.date }}<br>
-            <strong>Description:</strong> {{ transaction.description }}<br>
-            <a href="{{ url_for('view_receipt', transaction_id=transaction.id) }}">View Receipt</a>
-        </li>
-    {% endfor %}
-</ul>
-
+<!-- transaction_history.html -->
+   <h1>Transaction History</h1>
+   <ul>
+       {% for transaction in user_transactions %}
+           <li>
+               <strong>Date:</strong> {{ transaction.date }}<br>
+               <strong>Description:</strong> {{ transaction.description }}<br>
+               <a href="{{ url_for('view_receipt', transaction_id=transaction.id) }}">View Receipt</a>
+           </li>
+       {% endfor %}
+   </ul>
+   
 
    
   <br><br><br>

@@ -97,19 +97,15 @@ width: 150px;
  <video autoplay muted loop id="myVideo">
   <source src="../static/video5.mp4" type="video/mp4">
 </video> 
-
-              <!-- templates/confirm_transaction.html -->
-              <form method="POST" action="{{ url_for('process_transaction') }}">
-                <h1>Confirm Transaction</h1>
-
-                <p><strong>Source Account:</strong> {{ source_account }}</p>
-                <p><strong>Amount:</strong> {{ amount }}</p>
-                <p><strong>Description:</strong> {{ description }}</p>
-                <p><strong>Transaction Type:</strong> {{ transaction_type }}</p>
-
-                <button type="submit">Confirm and Process Transaction</button>
-              </form>
-
+        <!-- templates/confirm_transaction.html -->
+        <form method="POST" action="{{ url_for('process_transaction') }}">
+          <h1>Confirm Transaction</h1>
+          <p><strong>Source Account ID:</strong> {{ source_account }}</p> <!-- Change 'Source Account' to 'Source Account ID' -->
+          <p><strong>Amount:</strong> {{ amount }}</p>
+          <p><strong>Description:</strong> {{ description }}</p>
+          <p><strong>Transaction Type:</strong> {{ transaction_type }}</p>
+          <button type="submit">Confirm and Process Transaction</button>
+      </form>          
 
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>

@@ -29,6 +29,8 @@
   <!-- Template Main CSS File -->
   <link href="../static/assets/css/style.css" rel="stylesheet">
 
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
   <!-- =======================================================
   * Template Name: Arsha - v4.9.0
   * Template URL: https://bootstrapmade.com/arsha-free-bootstrap-html-template-corporate/
@@ -70,43 +72,26 @@
 <!-- <div class="row1" style="margin-top: 50px;"> -->
 <br><br><br>
   <!-- <div class="col-xl-3 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100"> -->
-    <a href="./click_here3.html"><img class="kol" data-aos="zoom-in" data-aos-delay="100" style="width: 100px;" src="../static/axis.png" alt=""><br>
-      <h1 id="pp" data-aos="zoom-in" data-aos-delay="100" style="color: white;">WELCOME TO AXIS BANK</h1></a>
+    <h1 id="pp" data-aos="zoom-in" data-aos-delay="100" style="color: white;">FeedBacks</h1></a>
   <!-- </div> -->
   
-  <section>
-    <div class="container" data-aos="fade-up" style="margin-top: 50px;" style="padding-left: 100px;" >
-  <div class="row" style="padding-left: 100px;" >
-    <div class="col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
-      <div class="icon-box" >
-        <a href="./deposite3.html"><div class="icon" id="imj"><img style="width: 150px;" src="../static/bank.png" alt=""></div>
-        <button class="col-md-5 d-flex align-items-stretch mt-4 mt-md-0" id="button1" >  Deposite </a></button>
-      </div>
-    </div>
-    
-    <div class="col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="200">
-      <div class="icon-box">
-        <a href="./loan.html"><div class="icon" id="imj"><img style="width: 150px;" src="../static/withdrawal.png" alt=""></div> 
-        <button class="col-md-5 d-flex align-items-stretch mt-4 mt-md-0" id="button1" >withdrawal </a></button>
-      </div>
-    </div>
-    
-    <div class="col-md-6 d-flex align-items-stretch mt-4 mt-xl-0" data-aos="zoom-in" data-aos-delay="300" style="padding-top: 60px;">
-      <div class="icon-box" >
-        <a href="./loan.html"><div class="icon" id="imj"><img style="width: 150px;" src="../static/insurance.png" alt=""></div> 
-        <button class="col-md-5 d-flex align-items-stretch mt-4 mt-md-0" id="button1" >Insurence </a></button>
-      </div>
-    </div>
-    <div class="col-md-6 d-flex align-items-stretch mt-4 mt-xl-0" data-aos="zoom-in" data-aos-delay="400" style="padding-top: 60px;">
-      <div class="icon-box" >
-        <a href="./loan.html"><div class="icon" id="imj"><img style="width: 150px;" src="../static/loan.png" alt=""></div> 
-        <button class="col-md-5 d-flex align-items-stretch mt-4 mt-md-0" id="button1" > Loan </a></button>
-      </div>
-    </div>
-  </div>
-  
+  <div class="container">
+    <h1 class="mt-4 mb-3">Leave Your Feedback</h1>
+    <form method="POST" action="/submit_feedback">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="feedback">Feedback:</label>
+            <textarea class="form-control" name="feedback" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
 </div>
-  </section>
+<!-- Bootstrap JS and jQuery -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
    
   <br><br><br>
   
