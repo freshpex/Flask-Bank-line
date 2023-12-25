@@ -85,6 +85,7 @@
 </video> 
 <!-- <div class="row1" style="margin-top: 50px;"> -->
 <br><br><br>
+<<<<<<< HEAD
   <!-- <div class="col-xl-3 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100"> -->
     <a href="./click_here2.html"><img class="kol" data-aos="zoom-in" data-aos-delay="100" style="width: 150px;" src="../static/pnb.png" alt=""><br>
       <h1 id="pp" data-aos="zoom-in" data-aos-delay="100" style="color: white;">WELCOME TO PNB BANK</h1></a>
@@ -123,6 +124,22 @@
   
 </div>
   </section>
+=======
+
+<!-- transaction_history.html -->
+   <h1>Transaction History</h1>
+   <ul>
+       {% for transaction in user_transactions %}
+           <li>
+               <strong>Date:</strong> {{ transaction.date }}<br>
+               <strong>Description:</strong> {{ transaction.description }}<br>
+               <a href="{{ url_for('view_receipt', transaction_id=transaction.id) }}">View Receipt</a>
+           </li>
+       {% endfor %}
+   </ul>
+   
+
+>>>>>>> aabd2f2 (add linters)
    
   <br><br><br>
   

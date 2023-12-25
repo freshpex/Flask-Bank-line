@@ -5,13 +5,12 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
+  <link rel="icon" href="https://th.bing.com/th/id/OIP.iEljT-80HeVhxxkpjEEl2AHaEo?w=296&h=184&c=7&r=0&o=5&dpr=1.3&pid=1.7" type="image/png" sizes="16x16">
   <title>Deposite-for-Sbi</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
-  <link rel="icon" href="https://th.bing.com/th/id/OIP.iEljT-80HeVhxxkpjEEl2AHaEo?w=296&h=184&c=7&r=0&o=5&dpr=1.3&pid=1.7" type="image/png" sizes="16x16">
- 
-  
+
   <!-- Favicons -->
   <link href="../static/assets/img/favicon.png" rel="icon">
   <link href="../static/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
@@ -61,15 +60,8 @@ background: #3bb986;
             transform: translateX(-50%) translateY(-50%);
             z-index: -10;
         }
-
-  .center{
-width: 150px;
- margin: 40px auto;
- 
-}
- </style>
-<body>
-  <!-- ======= Header ======= -->
+</style>
+<!-- ======= Header ======= -->
 <header id="header"class="fixed-top " >
   <div class="container d-flex align-items-center">
 
@@ -93,91 +85,43 @@ width: 150px;
 
   </div>
 </header><!-- End Header -->
-
- <!-- video -->
+<body>
+  <style>
+   .center{
+width: 150px;
+  margin: 40px auto;
+  
+}
+  </style>
+ /* video  */
  <video autoplay muted loop id="myVideo">
   <source src="../static/video5.mp4" type="video/mp4">
 </video> 
 
-  
-<<<<<<< HEAD
-
-<form method="POST" action="{{ url_for('process_transaction') }}">
-  <label for="transaction_type">Transaction Type:</label>
-  <select name="transaction_type" id="transaction_type" required>
-      <option value="local">Local Transfer</option>
-      <option value="international">International Transfer</option>
-  </select>
-
-  <div id="international_fields" style="display: none;">
-      <label for="destination_country">Destination Country:</label>
-      <select name="destination_country" required>
-          <option value="us">United States</option>
-          <option value="uk">United Kingdom</option>
-          <!-- Add other popular countries -->
-      </select>
-
-      <label for="currency">Currency:</label>
-      <select name="currency" required>
-          <option value="usd">US Dollar (USD)</option>
-          <option value="gbp">British Pound (GBP)</option>
-          <!-- Add other common currencies -->
-      </select>
-  </div>
-
-  <!-- Add other necessary fields for the transaction -->
-
-  <label for="source_account">Source Account:</label>
-  <select name="source_account" required>
-      {% for account in user_accounts %}
-          <option value="{{ account.account }}">{{ account.account }}</option>
-      {% endfor %}
-  </select>
-
-  <button type="submit">Submit Transaction</button>
-</form>
-=======
-  <!-- templates/transaction.html -->
-  <form method="POST" action="{{ url_for('process_transaction') }}">
-    <label for="transaction_type">Transaction Type:</label>
-    <select name="transaction_type" id="transaction_type" required>
-        <option value="local">Local Transfer</option>
-        <option value="international">International Transfer</option>
-    </select>
-    <div id="international_fields" style="display: none;">
-        <label for="destination_country">Destination Country:</label>
-        <select name="destination_country" required>
-            <option value="us">United States</option>
-            <option value="uk">United Kingdom</option>
-        </select>
-        <label for="currency">Currency:</label>
-        <select name="currency" required>
-            <option value="usd">US Dollar (USD)</option>
-            <option value="gbp">British Pound (GBP)</option>
-        </select>
-    </div>
-  
-    <label for="source_account">Source Account ID:</label> <!-- Change 'Source Account' to 'Source Account ID' -->
-    <select name="source_account" required>
-        {% for account in user_accounts %}
-            <option value="{{ account.id }}">{{ account.id }}</option> <!-- Change 'account.account' to 'account.id' -->
-        {% endfor %}
-    </select>
-  </form>
-  
->>>>>>> aabd2f2 (add linters)
-
-<script>
-  document.getElementById('transaction_type').addEventListener('change', function() {
-      var internationalFields = document.getElementById('international_fields');
-      if (this.value === 'international') {
-          internationalFields.style.display = 'block';
-      } else {
-          internationalFields.style.display = 'none';
-      }
-  });
-</script>
-
+             <!-- templates/process_transaction.html -->
+             <form method="POST" action="{{ url_for('process_transaction_logic') }}">
+              <h1>Process Transaction</h1>
+              <label for="source_account">Select the account ID:</label> <!-- Change 'Select the account' to 'Select the account ID' -->
+              <select name="source_account" required>
+                  {% for account in user_accounts %}
+                      <option value="{{ account.id }}">{{ account.id }}</option> <!-- Change 'account.account' to 'account.id' -->
+                  {% endfor %}
+              </select>
+              <p><strong>Amount:</strong> {{ amount }}</p>
+              <p><strong>Description:</strong> {{ description }}</p>
+              <p><strong>Transaction Type:</strong> {{ transaction_type }}</p>
+              {% if transaction_type == 'international' %}
+                  <label for="destination_country">Destination Country:</label>
+                  <input type="text" name="destination_country" required>
+                  <label for="currency">Currency:</label>
+                  <input type="text" name="currency" required>
+              {% endif %}
+              <input type="hidden" name="amount" value="{{ amount }}">
+              <input type="hidden" name="description" value="{{ description }}">
+              <input type="hidden" name="transaction_type" value="{{ transaction_type }}">
+              <button type="submit">Confirm Transaction</button>
+          </form>
+          
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -212,17 +156,9 @@ width: 150px;
               <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
             </ul>
           </div>
-
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Our Services</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Web Design</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Web Development</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Product Management</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li>
-            </ul>
-          </div>
+        </div>
+      </div>
+    </div>
   </footer><!-- End Footer -->
 
   <div id="preloader"></div>

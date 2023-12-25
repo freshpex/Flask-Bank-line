@@ -65,19 +65,17 @@
 
 <body>
   <main>
-
-  <h1>Loan History for Account {{ account_number }}</h1>
-
-{% if loan_history %}
-  <ul>
-    {% for loan in loan_history %}
-      <li>{{ loan.date }} - Loan Amount: {{ loan.amount }}, Status: {{ loan.status }}</li>
-    {% endfor %}
-  </ul>
-{% else %}
-  <p>No loan history available.</p>
-{% endif %}
-
+    <h1>Loan History for Account ID {{ account_id }}</h1> <!-- Change 'Account' to 'Account ID' -->
+  {% if loan_history %}
+    <ul>
+      {% for loan in loan_history %}
+        <li>{{ loan.date }} - Loan Amount: {{ loan.amount }}, Status: {{ loan.status }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No loan history available.</p>
+  {% endif %}
+  </main>
 
   </main><!-- End #main -->
 
