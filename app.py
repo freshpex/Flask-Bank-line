@@ -194,6 +194,14 @@ def transaction():
     user_accounts = User.query.filter_by(id=g.user['id']).all()
     return render_template('transaction.html', user_accounts=user_accounts)
 
+@app.route('/submit_feedback')
+def submit_feedback():
+    if g.user is None:
+        return redirect(url_for('login'))
+    # Fetch the current user's accounts
+    user_accounts = Account.query.filter_by(user_id=g.user['id']).all()
+    return render_template('dashboard.html', user_accounts=user_accounts)
+
 @app.route('/products')
 def products():
     if g.user is None:
@@ -222,8 +230,13 @@ def createaccount():
             current_user.lastname = lname
             current_user.gender = gender
 
+<<<<<<< HEAD
             # Commit the changes to the database
             db.session.commit()
+=======
+        new_account = Account(user_id=g.user['id'], account_type=account_type)
+        db.session.add(new_account)
+>>>>>>> 17da053 (Add view and hide account balance)
 
             # Redirect to account page
             return redirect(url_for('accounts'))
