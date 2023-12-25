@@ -2,12 +2,15 @@ from flask import Flask, render_template, request, g, session, url_for, redirect
 import sqlite3, hashlib, os, requests
 from werkzeug.utils import secure_filename
 from model import db, User, Transaction, Receipt, Loan, Account
+from flask_migrate import Migrate
+from config import INTERNATIONAL_FEE
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(16)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 DATABASE_FILE = 'instance/database.db'
 
+migrate = Migrate(app, db)
 db.init_app(app)
 
 # Function handling the hash password
@@ -270,25 +273,32 @@ def process_transaction_logic(account_id, amount, description, transaction_type,
     if not account:
         return render_template('error.html', error_message='Invalid source account.')
 
+    # Get the transaction type (debit or credit) based on the amount sign
+    transaction_type = 'debit' if amount < 0 else 'credit'
+
+    # Apply the international fee to the amount if the transaction type is 'international'
+    if transaction_type == 'international':
+        amount -= INTERNATIONAL_FEE
+
+    # Check if the account has sufficient funds
     if account.balance < amount:
         return render_template('error.html', error_message='Insufficient funds.')
 
+    # Deduct the amount from the account balance
     account.balance -= amount
 
+    # Create a new transaction object with a positive amount value and the transaction type
     new_transaction = Transaction(
         description=description,
-        amount=-amount,
+        amount=abs(amount),
+        transaction_type=transaction_type,
         user_id=account.user_id
     )
 
     db.session.add(new_transaction)
     db.session.commit()
 
-    if transaction_type == 'international':
-        international_fee = 10.0 
-        amount -= international_fee
-
-    account.balance -= international_fee if transaction_type == 'international' else 0
+    # Create a new receipt object with the relevant information
     new_receipt = Receipt(
         transaction_id=new_transaction.id,
         amount=amount,
@@ -308,24 +318,16 @@ def process_transaction():
     if g.user is None:
         return redirect(url_for('login'))
 
-    transaction_type = request.form.get('transaction_type')
+    # Get the account ID and the transaction type from the request form
     account_id = request.form.get('source_account')
-    amount = float(request.form.get('amount'))
-    description = request.form.get('description')
-    destination_country = None
-    currency = None
+    transaction_type = request.form.get('transaction_type')
 
-    if transaction_type == 'international':
-        destination_country = request.form.get('destination_country')
-        currency = request.form.get('currency')
-        international_fee = 10.0         
-        amount -= international_fee
-        
+    # Query the user accounts only once and store the result in a variable
     user_accounts = Account.query.filter_by(user_id=g.user['id']).all() 
 
     if len(user_accounts) > 1:
-        return render_template('process_transaction.html', user_accounts=user_accounts, amount=amount, description=description, transaction_type=transaction_type, source_account=account_id, destination_country=destination_country, currency=currency)  
-    return process_transaction_logic(account_id, amount, description, transaction_type, destination_country, currency)
+        return render_template('process_transaction.html', user_accounts=user_accounts, transaction_type=transaction_type, source_account=account_id) 
+    return process_transaction_logic(account_id, transaction_type)
 
 @app.route('/loan_history/<int:account_id>')
 def loan_history(account_id):
@@ -363,24 +365,35 @@ def deposit():
         return redirect(url_for('login'))
     
     if request.method == 'POST':
-        account_id = request.form.get('account_id')
-        amount = float(request.form.get('amount'))
+        # Get form data
+        amount = float(request.form['amount'])
+        account_id = int(request.form['account_id'])
 
-        # Fetch the account
-        account = Account.query.get(account_id)
+        # Fetch the user's account
+        account = Account.query.filter_by(id=account_id).first()
 
-        # Update the account balance
+        if not account:
+            return render_template('error.html', error_message='Invalid account.')
+
+        # Ensure that account.balance is initialized to 0.0 if it's None
+        if account.balance is None:
+            account.balance = 0.0
+
+        # Perform the deposit
         account.balance += amount
 
-        # Commit the changes to the database
+        # Create a new transaction record
+        new_transaction = Transaction(
+            description='Deposit',
+            amount=amount,
+            user_id=g.user['id']
+        )
+
+        db.session.add(new_transaction)
         db.session.commit()
 
-        # Redirect to accounts page
-        return redirect(url_for('accounts'))
-
-    # Render the deposit page
+        return render_template('confirmation.html', confirmation_message=f"Deposit of {amount} successfully processed.")
     return render_template('deposit.html')
-
 
 @app.errorhandler(400)
 def handle_bad_request(e):
