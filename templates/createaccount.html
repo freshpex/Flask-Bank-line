@@ -56,7 +56,7 @@
   <main>
     <section>
         <form method="POST" action="/createaccount">
-          <label for="fname">First Name:</label>
+            <label for="fname">First Name:</label>
             <input type="text" name="fname" required>
 
             <label for="lname">Last Name:</label>
@@ -68,23 +68,20 @@
             <label for="username">Username:</label>
             <input type="text" name="username" required>
 
-          <!--   <label for="profile">Picture:</label>
-            <input type="file" name="profile" required>
-
-            <label for="account">Account Type:</label>
-            <select name="account" required>
+            <label for="account_type">Account Type:</label> <!-- Changed 'account' to 'account_type' -->
+            <select name="account_type" required> <!-- Changed 'account' to 'account_type' -->
                 <option value="personal">Personal</option>
                 <option value="business">Business</option>
                 <option value="cooperate">Cooperate</option>
                 <option value="company">Company</option>
                 <option value="investment">Investment</option>
-            </select> -->
+            </select> 
 
-            <button type="submit" >continue</button>
+            <button type="submit">continue</button>
         </form>
-      </section>
+    </section>
+</main>
 
-    </main>
 
   <!-- Vendor JS Files -->
   <script src="../static/assets/vendor/aos/aos.js"></script>

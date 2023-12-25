@@ -14,10 +14,22 @@ class User(db.Model):
     gender = db.Column(db.String(50))
     privacy_enabled = db.Column(db.Boolean, default=False)
     notification_enabled = db.Column(db.Boolean, default=False)
-    profile_image = db.Column(db.String(255), nullable=True)
+    profile_image = db.Column(db.String(2505))
     account_type = db.Column(db.String(10))
-    account = db.Column(db.Integer, unique=True, default=lambda: random.randint(10000000000, 99999999999))
+    accounts = db.relationship('Account', backref='user', lazy=True)
     password = db.Column(db.String(64))
+    @db.event.listens_for(db.session, 'before_flush')
+    
+    def create_account_number(session, flush_context, instances):
+        for instance in session.new:
+            if isinstance(instance, User):
+                instance.account = instance.id + 10000000000
+                
+class Account(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    account_number = db.Column(db.Integer, unique=True, default=lambda: random.randint(10000000000, 99999999999))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    account_type = db.Column(db.String(10))  # Add this line
 
 class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -29,7 +41,7 @@ class Transaction(db.Model):
 class Loan(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, default=datetime.utcnow)
-    account_number = db.Column(db.Integer, db.ForeignKey('user.account'), nullable=False)
+    account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=False)  # Changed this line
     amount = db.Column(db.Float)
     status = db.Column(db.String(20))  # e.g., 'approved', 'pending', 'rejected'
 

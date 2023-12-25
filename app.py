@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, g, session, url_for, redirect, flash, send_from_directory
 import sqlite3, hashlib, os, requests
 from werkzeug.utils import secure_filename
-from model import db, User, Transaction, Receipt, Loan
+from model import db, User, Transaction, Receipt, Loan, Account
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(16)
@@ -27,7 +27,7 @@ def check_password(password, password_hash):
 
 
 def get_user(user_id):
-    query = "SELECT id, email, firstname, lastname, username, gender, account, password, notification_enabled, privacy_enabled, profile_image, account_type FROM user WHERE id = ?"
+    query = "SELECT id, email, firstname, lastname, username, gender, password, notification_enabled, privacy_enabled, profile_image, account_type FROM user WHERE id = ?"
     args = (user_id,)
     row = db_query(query, args)
 
@@ -35,7 +35,7 @@ def get_user(user_id):
         return None
 
     return {
-        'id': row[0][0], 'email': row[0][1], 'firstname': row[0][2], 'lastname': row[0][3], 'username': row[0][4], 'gender': row[0][5], 'account': row[0][10], 'password': row[0][11], 'notification_enabled': bool(row[0][7]), 'privacy_enabled': bool(row[0][6]), 'account_type': row[0][9]
+        'id': row[0][0], 'email': row[0][1], 'firstname': row[0][2], 'lastname': row[0][3], 'username': row[0][4], 'gender': row[0][5], 'password': row[0][10], 'notification_enabled': bool(row[0][7]), 'privacy_enabled': bool(row[0][6]), 'account_type': row[0][9]
     }
 
 
@@ -166,7 +166,8 @@ def index():
 def dashboard():
     if g.user is None:
         return redirect(url_for('login'))
-    user_accounts = User.query.filter_by(id=g.user['id']).all()
+    # Fetch the current user's accounts
+    user_accounts = Account.query.filter_by(user_id=g.user['id']).all()
     return render_template('dashboard.html', user_accounts=user_accounts)
 
 @app.route('/transaction')
@@ -186,39 +187,54 @@ def products():
 def createaccount():
     if g.user is None:
         return redirect(url_for('login'))
+    
     if request.method == 'POST':
-        try:
-            fname = request.form['fname']
-            lname = request.form['lname']
-            gender = request.form['gender']
-            username = request.form['username']
+        fname = request.form['fname']
+        lname = request.form['lname']
+        gender = request.form['gender']
+        username = request.form['username']
+        account_type = request.form['account_type']
 
-            # Fetch the current user instance
-            current_user = User.query.get(g.user['id'])
+        # Fetch the current user instance
+        current_user = User.query.get(g.user['id'])
 
-            # Update the user details
-            current_user.username = username
-            current_user.firstname = fname
-            current_user.lastname = lname
-            current_user.gender = gender
+        # Update the user details
+        current_user.username = username
+        current_user.firstname = fname
+        current_user.lastname = lname
+        current_user.gender = gender
+        current_user.account_type = account_type
 
-            # Commit the changes to the database
-            db.session.commit()
+        # Check if an account already exists for the user
+        existing_account = Account.query.filter_by(user_id=g.user['id']).first()
+        if existing_account:
+            # If an account exists, update it
+            existing_account.account_type = account_type
+        else:
+            # If no account exists, create a new one
+            new_account = Account(user_id=g.user['id'], account_type=account_type)
+            db.session.add(new_account)
 
-            # Redirect to account page
-            return redirect(url_for('accounts'))
-        except Exception as e:
-            print(f"Error updating user details: {e}")
-            db.session.rollback()
+        # Commit the changes to the database
+        db.session.commit()
+
+        # Redirect to account page
+        return redirect(url_for('accounts'))
 
     # Render the createaccount page
     return render_template('createaccount.html')
+
+
 
 @app.route('/accounts')
 def accounts():
     if g.user is None:
         return redirect(url_for('login'))
-    return render_template('accounts.html')
+    
+    # Fetch the current user's accounts
+    user_accounts = Account.query.filter_by(user_id=g.user['id']).all()
+    return render_template('accounts.html', user_accounts=user_accounts)  # Pass user_accounts to the template
+
 
 @app.route('/cardpayment')
 def cardpayment():

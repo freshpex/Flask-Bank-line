@@ -97,15 +97,24 @@ width: 150px;
  <video autoplay muted loop id="myVideo">
   <source src="../static/video5.mp4" type="video/mp4">
 </video> 
+    <br><br><br><br>
+    <main>
+      <section>
+        <div class="dish">
+          <h1>User Accounts</h1>
+          <ul>
+              {% for account in user_accounts %}
+                  <li>
+                      <strong>Account Number:</strong> {{ account.account_number }}<br> <!-- Changed 'account' to 'account_number' -->
+                      <strong>Account Type:</strong> {{ account.account_type }}<br>
+                      <strong>Balance:</strong> {{ account.balance }}<br>
+                  </li>
+              {% endfor %}
+          </ul>
+        </div>
+      </section>
+    </main>
 
-              <h1>User Accounts</h1>
-              <ul>
-                  {% for account in user_accounts %}
-                      <li>Account Number: {{ account.account }}</li>
-                      <li>Account Type: {{ account.account_type }}</li>
-                    </li><strong>Balance:</strong> {{ account.balance }}<br></li>
-                  {% endfor %}
-              </ul>
 
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>

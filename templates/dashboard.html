@@ -108,9 +108,9 @@
       <div class="dish">
        <ul>
           {% for account in user_accounts %}
-              <li>Account Number: {{ account.account }}</li>
+              <li>Account Number: {{ account.account_number }}</li>
               <li>Account Type: {{ account.account_type }}</li>
-              <button ><a href="{{ url_for('loan_history', account_number=account.account) }}">Loan History</a></button>
+              <button ><a href="{{ url_for('loan_history', account_number=account.account_number) }}">Loan History</a></button>
           {% endfor %}
       </ul>
 
