@@ -1,4 +1,37 @@
+<<<<<<< HEAD
 Flask
+=======
+alembic
+asgiref
+attrs
+autopep8
+beautifulsoup4
+bs4
+certifi
+charset-normalizer
+click
+colorama
+cycler
+docopt
+dominate
+enchant
+exceptiongroup
+faker
+Flask
+Flask-Bootstrap
+Flask-Migrate
+Flask-SQLAlchemy
+fonttools
+future
+geographiclib
+geopy
+google-api-python-client 
+google-auth-httplib2 
+google-auth-oauthlib
+gradescope-utils
+greenlet
+gspread
+>>>>>>> 1a74477 (update)
 gunicorn
 <<<<<<< HEAD
 =======
@@ -24,16 +57,20 @@ pyspellchecker
 pytest
 python-dateutil
 python-whois
+pyngrok
 pytz
+python-dotenv
 regex
 requests
 silpa-common
 six
 soundex
 soupsieve
+stripe
 SQLAlchemy
 sqlparse
 urllib3
+<<<<<<< HEAD
 gspread
 google-api-python-client 
 google-auth-httplib2 
@@ -42,3 +79,5 @@ google-auth-oauthlib
 >>>>>>> a0a89dc (Update requirements.txt.)
 =======
 >>>>>>> 37d2080 (Update requirements.txt.)
+=======
+>>>>>>> 1a74477 (update)

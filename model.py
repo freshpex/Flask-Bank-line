@@ -53,3 +53,11 @@ class Receipt(db.Model):
     description = db.Column(db.String(255))
     destination_country = db.Column(db.String(50))
     currency = db.Column(db.String(10))
+
+class Card(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    card_number = db.Column(db.String(16), unique=True)
+    cvv = db.Column(db.String(3))
+    expiration_date = db.Column(db.String(7))
+    cardholder_name = db.Column(db.String(100))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)    
