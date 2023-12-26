@@ -218,9 +218,22 @@ def transaction():
 def submit_feedback():
     if g.user is None:
         return redirect(url_for('login'))
+    
+    name = request.form['name']
+    feedback = request.form['feedback']
+    
     # Fetch the current user's accounts
     user_accounts = Account.query.filter_by(user_id=g.user['id']).all()
     return render_template('dashboard.html', user_accounts=user_accounts)
+
+@app.route('/message', methods=['POST'])
+def message():    
+    name = request.form['name']
+    email = request.form['email']
+    subject = request.form['subject']
+    message = request.form['message']
+    return f"Your message has been sent. Thank you!:{name, email, subject, message}"
+    
 
 @app.route('/products')
 def products():
@@ -291,7 +304,7 @@ def group_digits(s):
 def cardpayment():
     if g.user is None:
         return redirect(url_for('login'))
-    user_cards = Card.query.filter_by(user=g.user).all()
+    user_cards = Card.query.filter_by(user_id=g.user['id']).all()
     return render_template('cardpayment.html', user_cards=user_cards)
 
 def generate_card_number(card_type):
@@ -334,12 +347,11 @@ def generate_card():
     cvv = generate_cvv()
     expiration_date = generate_expiration_date()
     cardholder_name = request.form.get('name')
-
     # Assuming g.user is the currently logged-in user
-    user = g.user
+    user_id=g.user['id']
 
     # Create a new Card instance and associate it with the current user
-    card = Card(card_number=card_number, cvv=cvv, expiration_date=expiration_date, cardholder_name=cardholder_name, user=user)
+    card = Card(card_number=card_number, cvv=cvv, expiration_date=expiration_date, cardholder_name=cardholder_name, card_type=card_type, user_id=user_id)
     
     # Add the new card to the database
     db.session.add(card)

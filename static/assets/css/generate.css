@@ -62,10 +62,12 @@ p {
 }
 
 .card-logo {
-    max-width: 60px;
+    max-width: 100px;
     margin-left: 0; /* Adjusted margin */
     padding-left: 0;
-    justify-content: left;
+    justify-content: right;
+    align-items: right;
+    text-align: right;
 }
 
 .card-holder {
@@ -74,6 +76,8 @@ p {
     margin-left: 1px;
     padding-left: 0;
     justify-content: left;
+    align-items: left;
+    text-align: left;
 }
 
 .card-expiration {
@@ -84,15 +88,16 @@ p {
     position: absolute;
     bottom: 5px;
     text-align: center;
-    width: 100%;
+    width: 77%;
     color: red;
 }
 
 .black-line {
     width: 100%;
-    height: 2px;
+    height: 5px;
     background: #000;
-    margin-top: 5px; /* Added margin */
+    margin-top: 1px; /* Added margin */
+    margin-bottom: 5px; /* Added margin */
     padding: 10px;
 }
 
@@ -109,8 +114,6 @@ p {
     color: #000;
 }
 
-.logo, .holder {
-  text-align: left;
-  align-items: left;
-  justify-content: left;
+.holder {
+    margin-top: 10px;
 }
