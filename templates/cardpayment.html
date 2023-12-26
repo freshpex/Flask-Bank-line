@@ -60,6 +60,9 @@
 </header><!-- End Header -->
 <body>
 
+  <br><br><br>
+ <main>
+
 <!-- cardpayment.html -->
   {% if user_cards %}
     <div class="container mt-5">
@@ -68,7 +71,7 @@
         <div class="card">
           <div class="card-face front">
             <div class="Bank-Line" style="position: absolute; top: 10px; right: 10px;">Bank-Line</div>
-            <p class="logo">
+            <div class="logo">
               {% if card.card_type == 'visa' %}
                 <img src="https://img.icons8.com/color/96/000000/visa.png" class="card-logo" alt="Visa Logo">
               {% elif card.card_type == 'master' %}
@@ -78,12 +81,12 @@
               {% elif card.card_type == 'discover' %}
                 <img src="https://img.icons8.com/color/96/000000/discover.png" class="card-logo" alt="Discover Logo">
               {% endif %}
-            </p>
+            </div>
             <p class="card-text card-number">{{ card.card_number | group_digits }}</p>
             <div class="card-expiration">Valid thru {{ card.expiration_date }}</div>
-            <p class="holder"> 
+            <div class="holder"> 
               <div class="card-holder">{{ card.cardholder_name }}</div>
-            </p>
+            </div>
           </div>
           <div class="card-face back">
             <div class="black-line"></div>
@@ -111,8 +114,7 @@
     </div>
 
 
-<br><br><br>
- <main>
+
   <section id="breadcrumbs" class="breadcrumbs">
     <form method="POST" action="{{ url_for('generate_card') }}">
       <label for="card">Card Type:</label>

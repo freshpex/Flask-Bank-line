@@ -58,12 +58,14 @@
     </div>
   </header><!-- End Header -->
 <body>
+    <br><br><br>
+ <main>
     <div class="container mt-5">
         <div class="card-container">
           <div class="card">
             <div class="card-face front">
               <div class="Bank-Line" style="position: absolute; top: 10px; right: 10px;">Bank-Line</div>
-              <p class="logo"> <!-- Added a class here -->
+              <div class="logo">
                 {% if card_type == 'visa' %}
                   <img src="https://img.icons8.com/color/96/000000/visa.png" class="card-logo" alt="Visa Logo">
                 {% elif card_type == 'master' %}
@@ -73,12 +75,12 @@
                 {% elif card_type == 'discover' %}
                   <img src="https://img.icons8.com/color/96/000000/discover.png" class="card-logo" alt="Discover Logo">
                 {% endif %}
-              </p>
+              </div>
               <p class="card-text card-number">{{ card_number | group_digits }}</p>
               <div class="card-expiration">Valid thru {{ expiration_date }}</div>
-              <p class="holder"> <!-- Added a class here -->
+              <div class="holder">
                 <div class="card-holder">{{ cardholder_name }}</div>
-              </p>
+              </div>
             </div>
             <div class="card-face back">
               <div class="black-line"></div>
@@ -100,6 +102,7 @@
             for more details.
        </p>
       </div>
+    </main>
 
 <!-- Include Bootstrap JS and Popper.js -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>

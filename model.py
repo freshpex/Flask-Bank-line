@@ -60,4 +60,5 @@ class Card(db.Model):
     cvv = db.Column(db.String(3))
     expiration_date = db.Column(db.String(7))
     cardholder_name = db.Column(db.String(100))
+    card_type = db.Column(db.String(50))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)    
