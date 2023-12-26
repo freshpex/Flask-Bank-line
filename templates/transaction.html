@@ -56,40 +56,40 @@
 <main>
 <section id="breadcrumbs" class="breadcrumbs">
   <!-- templates/transaction.html -->
-  <form method="POST" action="{{ url_for('process_transaction') }}">
-    <label for="transaction_type">Transaction Type:</label>
-    <select name="transaction_type" id="transaction_type" required>
+  <form method="POST" class="signin-form" action="{{ url_for('process_transaction') }}">
+    <label class="form-control-placeholder" for="transaction_type">Transaction Type:</label>
+    <select class="form-control" name="transaction_type" id="transaction_type" required>
         <option value="local">Local Transfer</option>
         <option value="international">International Transfer</option>
     </select>
     <div id="international_fields" style="display: none;">
-        <label for="destination_country">Destination Country:</label>
-        <select name="destination_country" required>
+        <label class="form-control-placeholder" for="destination_country">Destination Country:</label>
+        <select class="form-control" name="destination_country" required>
             <option value="us">United States</option>
             <option value="uk">United Kingdom</option>
         </select>
-        <label for="currency">Currency:</label>
-        <select name="currency" required>
+        <label class="form-control-placeholder" for="currency">Currency:</label>
+        <select class="form-control" name="currency" required>
             <option value="usd">US Dollar (USD)</option>
             <option value="gbp">British Pound (GBP)</option>
         </select>
     </div>
 
-    <label for="amount">Amount:</label>
-    <input type="number" name="amount" step="0.01" required>
+    <label class="form-control-placeholder" for="amount">Amount:</label>
+    <input class="form-control" type="number" name="amount" step="0.01" required>
 
-    <label for="description">Description:</label>
-    <input type="text" name="description" required>
+    <label class="form-control-placeholder" for="description">Description:</label>
+    <input class="form-control" type="text" name="description" required>
 
-    <label for="acc_number">Address Number :</label>
-    <input type="number" name="acc_number" required>
+    <label class="form-control-placeholder" for="acc_number">IBAN Number :</label>
+    <input class="form-control" type="number" name="acc_number" required>
 
-    <label for="acc_name">Address Name :</label>
-    <input type="text" name="acc_name" required>
+    <label class="form-control-placeholder" for="acc_name">Address Name :</label>
+    <input class="form-control" type="text" name="acc_name" required>
 
   
-    <label for="source_account">Source Account ID:</label> <!-- Change 'Source Account' to 'Source Account ID' -->
-    <select name="source_account" required>
+    <label class="form-control-placeholder" for="source_account">Source Account ID:</label> <!-- Change 'Source Account' to 'Source Account ID' -->
+    <select class="form-control" name="source_account" required>
         {% for account in user_accounts %}
             <option value="{{ account.id }}">{{ account.id }}</option> <!-- Change 'account.account' to 'account.id' -->
         {% endfor %}

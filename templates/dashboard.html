@@ -74,6 +74,26 @@
     {% for account in user_accounts %}
       
       <section>
+        <div class="container" data-aos="fade-up" style="margin-top: 50px;" style="padding-left: 100px;" >
+          <div class="row" style="padding-left: 100px;" >
+            <div class="col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+              <div class="icon-box" >
+                <div class="dish">
+                  <ul>
+                    
+                      <li>Account Number: {{ account.account_number }}</li>
+                      <li>Account Type: {{ account.account_type }}</li>
+                      <li>
+                        Account Balance: <span id="balance-{{ account.id }}">{{ account.balance }}</span>
+                        <button onclick="toggleBalance(this)" data-target="balance-{{ account.id }}">
+                          <i class="fa fa-eye"></i>
+                        </button>
+                      </li>        
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
       <div class="container" data-aos="fade-up" style="margin-top: 50px;" style="padding-left: 100px;" >
         <div class="row" style="padding-left: 100px;" >
           <div class="col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
@@ -110,21 +130,7 @@
       </div>
       <br><br>
 
-    <div class="dish">
-      <ul>
-        
-          <li>Account Number: {{ account.account_number }}</li>
-          <li>Account Type: {{ account.account_type }}</li>
-          <li>
-            <!-- Add an id attribute to the balance element -->
-            Account Balance: <span id="balance-{{ account.id }}">{{ account.balance }}</span>
-            <!-- Add a button with an eye icon and a data-target attribute -->
-            <button onclick="toggleBalance(this)" data-target="balance-{{ account.id }}">
-              <i class="fa fa-eye"></i>
-            </button>
-          </li>        
-      </ul>
-    </div>
+    
 
   </section>
   {% endfor %}

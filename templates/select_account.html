@@ -56,19 +56,19 @@
 <main>
   <section id="breadcrumbs" class="breadcrumbs">
 <!-- templates/select_account.html -->
-<form method="POST" action="{{ url_for('confirm_transaction') }}">
+<form method="POST" class="signin-form" action="{{ url_for('confirm_transaction') }}">
   <h1>Select Account</h1>
 
-  <label for="source_account">Select the account:</label>
+  <label class="form-control-placeholder" for="source_account">Select the account:</label>
   <select name="source_account" required>
       {% for account in user_accounts %}
           <option value="{{ account.account }}">{{ account.account }}</option>
       {% endfor %}
   </select>
 
-  <input type="hidden" name="amount" value="{{ amount }}">
-  <input type="hidden" name="description" value="{{ description }}">
-  <input type="hidden" name="transaction_type" value="{{ transaction_type }}">
+  <input class="form-control" type="hidden" name="amount" value="{{ amount }}">
+  <input class="form-control" type="hidden" name="description" value="{{ description }}">
+  <input class="form-control" type="hidden" name="transaction_type" value="{{ transaction_type }}">
 
   <button type="submit">Confirm Transaction</button>
 </form>

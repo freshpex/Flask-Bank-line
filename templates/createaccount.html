@@ -55,21 +55,21 @@
  
   <main>
     <section>
-        <form method="POST" action="/createaccount">
-            <label for="fname">First Name:</label>
-            <input type="text" name="fname" required>
+        <form method="POST" action="/createaccount" class="signin-form">
+            <label for="fname" class="form-control-placeholder">First Name:</label>
+            <input class="form-control" type="text" name="fname" required>
 
-            <label for="lname">Last Name:</label>
-            <input type="text" name="lname" required>
+            <label for="lname" class="form-control-placeholder">Last Name:</label>
+            <input class="form-control" type="text" name="lname" required>
 
-            <label for="gender">Gender:</label>
-            <input type="text" name="gender" required> 
+            <label for="gender" class="form-control-placeholder">Gender:</label>
+            <input class="form-control" type="text" name="gender" required> 
 
-            <label for="username">Username:</label>
-            <input type="text" name="username" required>
+            <label for="username" class="form-control-placeholder">Username:</label>
+            <input class="form-control" type="text" name="username" required>
 
-            <label for="account_type">Account Type:</label> <!-- Changed 'account' to 'account_type' -->
-            <select name="account_type" required> <!-- Changed 'account' to 'account_type' -->
+            <label for="account_type" class="form-control-placeholder">Account Type:</label> <!-- Changed 'account' to 'account_type' -->
+            <select class="form-control" name="account_type" required> <!-- Changed 'account' to 'account_type' -->
                 <option value="personal">Personal</option>
                 <option value="business">Business</option>
                 <option value="cooperate">Cooperate</option>
