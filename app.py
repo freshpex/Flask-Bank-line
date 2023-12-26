@@ -1,14 +1,25 @@
-from flask import Flask, render_template, request, g, session, url_for, redirect, flash, send_from_directory
+from flask import Flask, render_template, request, g, session, url_for, redirect, flash, send_from_directory, abort
 import sqlite3, hashlib, os, requests
 from werkzeug.utils import secure_filename
-from model import db, User, Transaction, Receipt, Loan, Account
+from model import db, User, Transaction, Receipt, Loan, Account, Card
 from flask_migrate import Migrate
-from config import INTERNATIONAL_FEE  
+from config import INTERNATIONAL_FEE
+import stripe, os
+from faker import Faker
+import random
+from datetime import datetime
+
+fake = Faker()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(16)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 DATABASE_FILE = 'instance/database.db'
+stripe_keys = {
+    'secret_key': os.environ['STRIPE_SECRET_KEY'],
+    'publishable_key': os.environ['STRIPE_PUBLISHABLE_KEY'],
+}
+stripe.api_key = stripe_keys['secret_key']
 
 migrate = Migrate(app, db)
 db.init_app(app)
@@ -173,7 +184,7 @@ def dashboard():
     user_accounts = Account.query.filter_by(user_id=g.user['id']).all()
     return render_template('dashboard.html', user_accounts=user_accounts)
 
-@app.route('/submit_feedback')
+@app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
     if g.user is None:
         return redirect(url_for('login'))
@@ -232,12 +243,71 @@ def accounts():
     user_accounts = Account.query.filter_by(user_id=g.user['id']).all()
     return render_template('accounts.html', user_accounts=user_accounts)  # Pass user_accounts to the template
 
+@app.template_filter('group_digits')
+def group_digits(s):
+    # Format the string s by grouping digits in fours
+    grouped_digits = [s[i:i + 4] for i in range(0, len(s), 4)]
+    return ' '.join(grouped_digits)
 
 @app.route('/cardpayment')
 def cardpayment():
     if g.user is None:
         return redirect(url_for('login'))
-    return render_template('cardpayment.html')
+    user_cards = Card.query.filter_by(user=g.user).all()
+    return render_template('cardpayment.html', user_cards=user_cards)
+
+def generate_card_number(card_type):
+    card_prefixes = {
+        'visa': ['4'],
+        'master': ['5'],
+        'amex': ['34', '37'],
+        'discover': ['6011'],
+    }
+
+    if card_type not in card_prefixes:
+        raise ValueError("Invalid card type")
+
+    prefix = random.choice(card_prefixes[card_type])
+    card_number = prefix + ''.join([str(random.randint(0, 9)) for _ in range(14)])  # 15 digits (excluding check digit)
+
+    check_digit = str((10 - sum(int(digit) for digit in card_number) % 10) % 10)
+    card_number += check_digit
+
+    return card_number
+
+def generate_cvv():
+    return str(random.randint(100, 999))
+
+def generate_expiration_date():
+    current_year = datetime.now().year
+    expiration_year = current_year + random.randint(1, 5)  # Card valid for 1 to 5 years
+    expiration_month = random.randint(1, 12)
+    
+    expiration_date = f"{expiration_month:02d}/{expiration_year}"
+
+    return expiration_date
+
+@app.route('/generate-card', methods=['POST'])
+def generate_card():
+    if g.user is None:
+        return redirect(url_for('login'))
+    card_type = request.form.get('card')
+    card_number = generate_card_number(card_type)
+    cvv = generate_cvv()
+    expiration_date = generate_expiration_date()
+    cardholder_name = request.form.get('name')
+
+    # Assuming g.user is the currently logged-in user
+    user = g.user
+
+    # Create a new Card instance and associate it with the current user
+    card = Card(card_number=card_number, cvv=cvv, expiration_date=expiration_date, cardholder_name=cardholder_name, user=user)
+    
+    # Add the new card to the database
+    db.session.add(card)
+    db.session.commit()
+
+    return render_template('generated_card.html', card_number=card_number, cvv=cvv, expiration_date=expiration_date, cardholder_name=cardholder_name, card_type=card_type, group_digits=group_digits)
 
 @app.route('/feedbacks')
 def feedbacks():
@@ -416,9 +486,35 @@ def deposit():
 
         db.session.add(new_transaction)
         db.session.commit()
+        
+        # Create a Stripe Session
+        session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[{
+                'price_data': {
+                    'currency': 'usd',  # Change to your desired currency
+                    'unit_amount': int(amount * 100),  # Amount in cents
+                    'product_data': {
+                        'name': 'Deposit',
+                    },
+                },
+                'quantity': 1,
+            }],
+            mode='payment',
+            success_url=url_for('deposit_success', _external=True),
+            cancel_url=url_for('deposit_cancel', _external=True),
+        )
 
-        return render_template('confirmation.html', confirmation_message=f"Deposit of {amount} successfully processed.")
+        return redirect(session.url)
     return render_template('deposit.html')
+
+@app.route('/deposit/success')
+def deposit_success():
+    return render_template('confirmation.html', confirmation_message='Deposit successful!')
+
+@app.route('/deposit/cancel')
+def deposit_cancel():
+    return render_template('error.html', error_message='Deposit canceled.')
 
 @app.errorhandler(400)
 def handle_bad_request(e):

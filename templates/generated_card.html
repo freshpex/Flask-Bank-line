@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generated Card</title>
+  <!-- Include Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../static/assets/css/generate.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card-container">
+          <div class="card">
+            <div class="card-face front">
+              <div class="Bank-Line" style="position: absolute; top: 10px; right: 10px;">Bank-Line</div>
+              <p class="logo"> <!-- Added a class here -->
+                {% if card_type == 'visa' %}
+                  <img src="https://img.icons8.com/color/96/000000/visa.png" class="card-logo" alt="Visa Logo">
+                {% elif card_type == 'master' %}
+                  <img src="https://img.icons8.com/color/96/000000/mastercard-logo.png" class="card-logo" alt="MasterCard Logo">
+                {% elif card_type == 'amex' %}
+                  <img src="https://img.icons8.com/color/96/000000/amex.png" class="card-logo" alt="Amex Logo">
+                {% elif card_type == 'discover' %}
+                  <img src="https://img.icons8.com/color/96/000000/discover.png" class="card-logo" alt="Discover Logo">
+                {% endif %}
+              </p>
+              <p class="card-text card-number">{{ card_number | group_digits }}</p>
+              <div class="card-expiration">Valid thru {{ expiration_date }}</div>
+              <p class="holder"> <!-- Added a class here -->
+                <div class="card-holder">{{ cardholder_name }}</div>
+              </p>
+            </div>
+            <div class="card-face back">
+              <div class="black-line"></div>
+              <div class="white-box">
+                <div class="cvv">{{ cvv }}</div>
+              </div>              
+            </div>
+          </div>
+        </div>
+        <p class="disclaimer">Disclaimer: This card is issued by Bank-Line and is subject to the terms
+            and conditions of the Cardholder Agreement. By using this card, 
+            you agree to abide by the Cardholder Agreement and the applicable laws and regulations. 
+            This card is not a credit card and does not provide any overdraft protection. 
+            You are responsible for maintaining sufficient funds in your linked account to cover your transactions. 
+            If you use this card for purchases or withdrawals in a foreign currency, you may incur additional fees 
+            and charges. This card may not be accepted by some merchants or ATMs, and may not be suitable for 
+            reservations that require you to show a physical card. Bank-Line is not liable for any loss, damage, 
+            or inconvenience caused by the use or misuse of this card. Please refer to the Cardholder Agreement 
+            for more details.
+       </p>
+      </div>
+
+<!-- Include Bootstrap JS and Popper.js -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
+</html>
