@@ -248,20 +248,38 @@ def createaccount():
 <<<<<<< HEAD
 =======
     if request.method == 'POST':
+<<<<<<< HEAD
         try:
             fname = request.form['fname']
             lname = request.form['lname']
             gender = request.form['gender']
             username = request.form['username']
+=======
+        fname = request.form['fname']
+        lname = request.form['lname']
+        gender = request.form['gender']
+        picture = request.form['file']
+        id_front = request.form['file_nf']
+        id_back = request.form['file']
+        account_type = request.form['account_type']
+>>>>>>> c3b245c (Add creat account more details)
 
             # Fetch the current user instance
             current_user = User.query.get(g.user['id'])
 
+<<<<<<< HEAD
             # Update the user details
             current_user.username = username
             current_user.firstname = fname
             current_user.lastname = lname
             current_user.gender = gender
+=======
+        # Update the user details
+        current_user.firstname = fname
+        current_user.lastname = lname
+        current_user.gender = gender
+        current_user.account_type = account_type
+>>>>>>> c3b245c (Add creat account more details)
 
 <<<<<<< HEAD
             # Commit the changes to the database
