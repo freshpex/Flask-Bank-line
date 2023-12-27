@@ -62,13 +62,10 @@ background: #3bb986;
         }
 </style>
 <!-- ======= Header ======= -->
-<header id="header"class="fixed-top " >
+<header id="header" >
   <div class="container d-flex align-items-center">
 
-    <h1 class="logo me-auto"><a href="./index.html">Bank-Line</a></h1>
-    <!-- Uncomment below if you prefer to use an image logo -->
-    <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-
+    <h1 class="logo me-auto"><a href="/dashboard">Bank-Line</a></h1>
     <nav id="navbar" class="navbar">
       <ul>
         <li><a class="nav-link scrollto active" href="/dashboard">Home</a></li>
@@ -92,27 +89,40 @@ background: #3bb986;
   <section id="breadcrumbs" class="breadcrumbs">
 
              <!-- templates/process_transaction.html -->
+<<<<<<< HEAD
              <form method="POST" action="{{ url_for('process_transaction_logic') }}">
               <h1>Process Transaction</h1>
               <label for="source_account">Select the account ID:</label> <!-- Change 'Select the account' to 'Select the account ID' -->
               <select name="source_account" required>
+=======
+             <form method="POST" class="signin-form" action="{{ url_for('process_double_transaction') }}">
+              <label class="form-control-placeholder" for="source_account">Select the account ID:</label> <!-- Change 'Select the account' to 'Select the account ID' -->
+              <select class="form-control" name="source_account" required>
+>>>>>>> 30acda6 (update)
                   {% for account in user_accounts %}
                       <option value="{{ account.id }}">{{ account.id }}</option> <!-- Change 'account.account' to 'account.id' -->
                   {% endfor %}
               </select>
-              <p><strong>Amount:</strong> {{ amount }}</p>
-              <p><strong>Description:</strong> {{ description }}</p>
-              <p><strong>Transaction Type:</strong> {{ transaction_type }}</p>
+              <p><strong style="color: #3bb986">Amount:</strong> {{ amount }}</p>
+              <p><strong style="color: #3bb986">Description:</strong> {{ description }}</p>
+              <p><strong style="color: #3bb986">Transaction Type:</strong> {{ transaction_type }}</p>
               {% if transaction_type == 'international' %}
                   <label for="destination_country">Destination Country:</label>
                   <input type="text" name="destination_country" required>
                   <label for="currency">Currency:</label>
                   <input type="text" name="currency" required>
               {% endif %}
+<<<<<<< HEAD
               <input type="hidden" name="amount" value="{{ amount }}">
               <input type="hidden" name="description" value="{{ description }}">
               <input type="hidden" name="transaction_type" value="{{ transaction_type }}">
               <button type="submit">Confirm Transaction</button>
+=======
+              <input class="form-control" type="hidden" name="amount" value="{{ amount }}">
+              <input class="form-control" type="hidden" name="description" value="{{ description }}">
+              <input class="form-control" type="hidden" name="transaction_type" value="{{ transaction_type }}">
+              <button style="background-color: #3bb986;" type="submit">Confirm Transaction</button>
+>>>>>>> 30acda6 (update)
           </form>
         </section>
       </main>

@@ -237,7 +237,7 @@ width: 150px;
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <link rel="icon" href="https://th.bing.com/th/id/OIP.iEljT-80HeVhxxkpjEEl2AHaEo?w=296&h=184&c=7&r=0&o=5&dpr=1.3&pid=1.7" type="image/png" sizes="16x16">
-  <title>Create an Account</title>
+  <title>Account Details</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -269,7 +269,7 @@ width: 150px;
 <header id="header"class="fixed-top " >
   <div class="container d-flex align-items-center">
 
-    <h1 class="logo me-auto"><a href="./index.html">Bank-Line</a></h1>
+    <h1 class="logo me-auto"><a href="/dashboard">Bank-Line</a></h1>
     <nav id="navbar" class="navbar">
       <ul>
         <li><a class="nav-link scrollto active" href="/dashboard">Home</a></li>
@@ -293,22 +293,22 @@ width: 150px;
     <main>
       <section id="breadcrumbs" class="breadcrumbs">
         <div class="dish">
-          <h1>Accounts</h1>
           <ul>
               {% for account in user_accounts %}
                   <li>
-                      <strong>Account Number:</strong> {{ account.account_number }}<br> <!-- Changed 'account' to 'account_number' -->
-                      <strong>Account Type:</strong> {{ account.account_type }}<br>
+                    <strong style="color: #3bb986">Account IBAN Number:</strong> {{ account.id }}<br>
+                      <strong style="color: #3bb986">Account Number:</strong> {{ account.account_number }}<br> <!-- Changed 'account' to 'account_number' -->
+                      <strong style="color: #3bb986">Account Type:</strong> {{ account.account_type }}<br>
                       <li>
                         <!-- Add an id attribute to the balance element -->
-                        <strong> Account Balance:</strong> <span id="balance-{{ account.id }}">{{ account.balance }}</span>
+                        <strongstyle="color: #3bb986"> Account Balance:</strong> <span id="balance-{{ account.id }}">{{ account.balance }}</span>
                         <!-- Add a button with an eye icon and a data-target attribute -->
                         <button onclick="toggleBalance(this)" data-target="balance-{{ account.id }}">
                           <i class="fa fa-eye"></i>
                         </button>
                       </li><br>                    
                     <!-- Example button linking to the bank statement page -->
-                    <a href="{{ url_for('bank_statement') }}" class="btn btn-primary">Generate Bank Statement</a>
+                    <a href="{{ url_for('bank_statement') }}" style="background-color: #3bb986;">Generate Bank Statement</a>
                   </li>
               {% endfor %}
           </ul>

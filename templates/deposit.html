@@ -33,7 +33,7 @@
 <header id="header"class="fixed-top " >
   <div class="container d-flex align-items-center">
 
-    <h1 class="logo me-auto"><a href="./index.html">Bank-Line</a></h1>
+    <h1 class="logo me-auto"><a href="/dashboard">Bank-Line</a></h1>
     <nav id="navbar" class="navbar">
       <ul>
         <li><a class="nav-link scrollto active" href="/dashboard">Home</a></li>
@@ -56,14 +56,23 @@
     <main>
       <main>
         <section id="breadcrumbs" class="breadcrumbs">
+<<<<<<< HEAD
           <form method="POST" action="/deposit">
               <label for="account_id">Account ID:</label>
               <input type="text" name="account_id" required>
   
               <label for="amount">Amount:</label>
               <input type="number" name="amount" required>
+=======
+          <form method="POST" action="/deposit" class="signin-form">
+              <label style="color: #3bb986" class="form-control-placeholder" for="account_id">Account IBAN Number:</label>
+              <input class="form-control" type="text" name="account_id" required>
   
-              <button type="submit">Deposit</button>
+              <label style="color: #3bb986" class="form-control-placeholder" for="amount">Amount:</label>
+              <input class="form-control" type="number" name="amount" required>
+>>>>>>> 30acda6 (update)
+  
+              <button style="background-color: #3bb986;" type="submit">Deposit</button>
           </form>
       </section>
   </main>

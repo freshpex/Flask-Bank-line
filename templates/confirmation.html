@@ -33,7 +33,7 @@
 <header id="header"class="fixed-top " >
   <div class="container d-flex align-items-center">
 
-    <h1 class="logo me-auto"><a href="./index.html">Bank-Line</a></h1>
+    <h1 class="logo me-auto"><a href="/dashboard">Bank-Line</a></h1>
     <nav id="navbar" class="navbar">
       <ul>
         <li><a class="nav-link scrollto active" href="/dashboard">Home</a></li>
@@ -56,11 +56,11 @@
 <main>
   <section id="breadcrumbs" class="breadcrumbs">
     <!-- templates/confirmation.html -->
-  <h1>Transaction Confirmation</h1>
+  <h1 style="color: #3bb986">Transaction Confirmation</h1>
 
-  <p>{{ confirmation_message }}</p>
+  <p style="color: #3bb986">{{ confirmation_message }}</p>
 
-  <a href="{{ url_for('history') }}">View Transaction History</a>
+  <a href="{{ url_for('history') }}" style="background-color: #3bb986;">View Transaction History</a>
 
 
   </section>

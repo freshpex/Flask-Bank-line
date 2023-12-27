@@ -38,10 +38,14 @@
 <header id="header" class="fixed-top " >
   <div class="container d-flex align-items-center">
 
+<<<<<<< HEAD
     <h1 class="logo me-auto"><a href="./index.html">Bank-Line</a></h1>
     <!-- Uncomment below if you prefer to use an image logo -->
     <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
+=======
+    <h1 class="logo me-auto"><a href="/dashboard">Bank-Line</a></h1>
+>>>>>>> 30acda6 (update)
     <nav id="navbar" class="navbar">
       <ul>
         <li><a class="nav-link scrollto active" href="./index.html">Home</a></li>
@@ -129,22 +133,32 @@
     {% endif %}
     </div>
 
+<<<<<<< HEAD
 
 
   <section id="breadcrumbs" class="breadcrumbs">
     <form method="POST" action="{{ url_for('generate_card') }}">
       <label for="card">Card Type:</label>
       <select name="card" id="card" required>
+=======
+    <form method="POST" action="{{ url_for('generate_card') }}" class="signin-form">
+      <label style="color: #3bb986" for="card" class="form-control-placeholder">Card Type:</label>
+      <select class="form-control" name="card" id="card" required>
+>>>>>>> 30acda6 (update)
           <option value="visa">Visa Card</option>
           <option value="master">Master Card</option>
           <option value="amex">Amex Card</option>
           <option value="discover">Discover Card</option>
       </select>
 
+<<<<<<< HEAD
       <label for="name">Name on Card:</label>
+=======
+      <label style="color: #3bb986" for="name" class="form-control-placeholder">Name on Card:</label>
+>>>>>>> 30acda6 (update)
       <input type="text" class="form-control" name="name" id="name" required>
       
-      <button type="submit">Generate</button>
+      <button type="submit" style="background-color: #3bb986;" >Generate</button>
     </form>  
 </div>
   </section>

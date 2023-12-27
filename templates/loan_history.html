@@ -35,16 +35,31 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+  <style>
+    /* Add this style to make the status text blinking */
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.blinking {
+  animation: blink 1s infinite; /* Change the duration if needed */
+}
+</style>
 </head>
 
 <!-- ======= Header ======= -->
-<header id="header"class="fixed-top " >
+<header id="header">
   <div class="container d-flex align-items-center">
 
-    <h1 class="logo me-auto"><a href="./index.html">Bank-Line</a></h1>
-    <!-- Uncomment below if you prefer to use an image logo -->
-    <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-
+    <h1 class="logo me-auto"><a href="/dashboard">Bank-Line</a></h1>
     <nav id="navbar" class="navbar">
       <ul>
         <li><a class="nav-link scrollto active" href="/dashboard">Home</a></li>
@@ -66,18 +81,18 @@
 
   <br><br><br><br><br><br><br>
   <main>
-<section id="breadcrumbs" class="breadcrumbs">
-    <h1>Loan History for Account ID {{ account_id }}</h1> <!-- Change 'Account' to 'Account ID' -->
-  {% if loan_history %}
-    <ul>
-      {% for loan in loan_history %}
-        <li>{{ loan.date }} - Loan Amount: {{ loan.amount }}, Status: {{ loan.status }}</li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No loan history available.</p>
-  {% endif %}
-  </section>
+    <section id="breadcrumbs" class="breadcrumbs">
+      <h1 style="color: #3bb986">Loan History for Account ID {{ account_id }}</h1>
+      {% if loan_history %}
+        <ul>
+          {% for loan in loan_history %}
+            <li>{{ loan.date }} <strong>- Loan Amount:</strong> {{ loan.amount }}, Status: <span class="blinking">{{ loan.status }}</span></li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p style="color: #3bb986">No loan history available.</p>
+      {% endif %}
+    </section>
 
   </main><!-- End #main -->
 

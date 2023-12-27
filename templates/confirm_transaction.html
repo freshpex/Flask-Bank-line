@@ -33,7 +33,7 @@
 <header id="header"class="fixed-top " >
   <div class="container d-flex align-items-center">
 
-    <h1 class="logo me-auto"><a href="./index.html">Bank-Line</a></h1>
+    <h1 class="logo me-auto"><a href="/dashboard">Bank-Line</a></h1>
     <nav id="navbar" class="navbar">
       <ul>
         <li><a class="nav-link scrollto active" href="/dashboard">Home</a></li>
@@ -58,12 +58,12 @@
   <section id="breadcrumbs" class="breadcrumbs">
         <!-- templates/confirm_transaction.html -->
         <form method="POST" action="{{ url_for('process_transaction') }}">
-          <h1>Confirm Transaction</h1>
-          <p><strong>Source Account ID:</strong> {{ source_account }}</p> <!-- Change 'Source Account' to 'Source Account ID' -->
-          <p><strong>Amount:</strong> {{ amount }}</p>
-          <p><strong>Description:</strong> {{ description }}</p>
-          <p><strong>Transaction Type:</strong> {{ transaction_type }}</p>
-          <button type="submit">Confirm and Process Transaction</button>
+          <h1 style="color: #3bb986">Confirm Transaction</h1>
+          <p><strong style="color: #3bb986">Source Account ID:</strong> {{ source_account }}</p> <!-- Change 'Source Account' to 'Source Account ID' -->
+          <p><strong style="color: #3bb986">Amount:</strong> {{ amount }}</p>
+          <p><strong style="color: #3bb986">Description:</strong> {{ description }}</p>
+          <p><strong style="color: #3bb986">Transaction Type:</strong> {{ transaction_type }}</p>
+          <button type="submit" style="background-color: #3bb986;">Confirm and Process Transaction</button>
       </form>          
 
     </section>

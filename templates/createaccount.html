@@ -33,7 +33,7 @@
 <header id="header"class="fixed-top " >
   <div class="container d-flex align-items-center">
 
-    <h1 class="logo me-auto"><a href="./index.html">Bank-Line</a></h1>
+    <h1 class="logo me-auto"><a href="/dashboard">Bank-Line</a></h1>
     <nav id="navbar" class="navbar">
       <ul>
         <li><a class="nav-link scrollto active" href="./index.html">Home</a></li>
@@ -149,6 +149,7 @@ width: 150px;
  
   <main>
     <section>
+<<<<<<< HEAD
         <form method="POST" action="/createaccount">
           <label for="fname">First Name:</label>
             <input type="text" name="fname" required>
@@ -167,6 +168,23 @@ width: 150px;
 
             <label for="account">Account Type:</label>
             <select name="account" required>
+=======
+        <form method="POST" action="/createaccount" class="signin-form">
+            <label style="color: #3bb986" for="fname" class="form-control-placeholder">First Name:</label>
+            <input class="form-control" type="text" name="fname" required>
+
+            <label style="color: #3bb986" for="lname" class="form-control-placeholder">Last Name:</label>
+            <input class="form-control" type="text" name="lname" required>
+
+            <label style="color: #3bb986" for="gender" class="form-control-placeholder">Gender:</label>
+            <input class="form-control" type="text" name="gender" required> 
+
+            <label style="color: #3bb986" for="username" class="form-control-placeholder">Username:</label>
+            <input class="form-control" type="text" name="username" required>
+
+            <label style="color: #3bb986" style="color: #47b2e4"for="account_type" class="form-control-placeholder">Account Type:</label> <!-- Changed 'account' to 'account_type' -->
+            <select class="form-control" name="account_type" required> <!-- Changed 'account' to 'account_type' -->
+>>>>>>> 30acda6 (update)
                 <option value="personal">Personal</option>
                 <option value="business">Business</option>
                 <option value="cooperate">Cooperate</option>
@@ -174,7 +192,11 @@ width: 150px;
                 <option value="investment">Investment</option>
             </select> -->
 
+<<<<<<< HEAD
             <button type="submit" >continue</button>
+=======
+            <button style="background-color: #3bb986;" type="submit">continue</button>
+>>>>>>> 30acda6 (update)
         </form>
       </section>
 

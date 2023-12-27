@@ -33,7 +33,7 @@
 <header id="header"class="fixed-top " >
   <div class="container d-flex align-items-center">
 
-    <h1 class="logo me-auto"><a href="./index.html">Bank-Line</a></h1>
+    <h1 class="logo me-auto"><a href="/dashboard">Bank-Line</a></h1>
     <nav id="navbar" class="navbar">
       <ul>
         <li><a class="nav-link scrollto active" href="/dashboard">Home</a></li>
@@ -102,13 +102,20 @@
 <section id="breadcrumbs" class="breadcrumbs">
 >>>>>>> bf8bbb6 (Add background)
   <!-- templates/transaction.html -->
+<<<<<<< HEAD
   <form method="POST" action="{{ url_for('process_transaction') }}">
     <label for="transaction_type">Transaction Type:</label>
     <select name="transaction_type" id="transaction_type" required>
+=======
+  <form method="POST" class="signin-form" action="{{ url_for('process_transaction') }}">
+    <label style="color: #47b2e4" class="form-control-placeholder" for="transaction_type">Transaction Type:</label>
+    <select class="form-control" name="transaction_type" id="transaction_type" required>
+>>>>>>> 30acda6 (update)
         <option value="local">Local Transfer</option>
         <option value="international">International Transfer</option>
     </select>
     <div id="international_fields" style="display: none;">
+<<<<<<< HEAD
         <label for="destination_country">Destination Country:</label>
         <select name="destination_country" required>
             <option value="us">United States</option>
@@ -116,11 +123,21 @@
         </select>
         <label for="currency">Currency:</label>
         <select name="currency" required>
+=======
+        <label style="color: #47b2e4" class="form-control-placeholder" for="destination_country">Destination Country:</label>
+        <select class="form-control" name="destination_country" required>
+            <option value="us">United States</option>
+            <option value="uk">United Kingdom</option>
+        </select>
+        <label style="color: #47b2e4" class="form-control-placeholder" for="currency">Currency:</label>
+        <select class="form-control" name="currency" required>
+>>>>>>> 30acda6 (update)
             <option value="usd">US Dollar (USD)</option>
             <option value="gbp">British Pound (GBP)</option>
         </select>
     </div>
 
+<<<<<<< HEAD
     <label for="amount">Amount:</label>
     <input type="number" name="amount" step="0.01" required>
 
@@ -130,11 +147,28 @@
   
     <label for="source_account">Source Account ID:</label> <!-- Change 'Source Account' to 'Source Account ID' -->
     <select name="source_account" required>
+=======
+    <label style="color: #47b2e4" class="form-control-placeholder" for="amount">Amount:</label>
+    <input class="form-control" type="number" name="amount" step="0.01" required>
+
+    <label style="color: #47b2e4" class="form-control-placeholder" for="description">Description:</label>
+    <input class="form-control" type="text" name="description" required>
+
+    <label style="color: #47b2e4" class="form-control-placeholder" for="acc_number">IBAN Number :</label>
+    <input class="form-control" type="number" name="acc_number" required>
+
+    <label style="color: #47b2e4" class="form-control-placeholder" for="acc_name">Address Name :</label>
+    <input class="form-control" type="text" name="acc_name" required>
+
+  
+    <label style="color: #47b2e4" class="form-control-placeholder" for="source_account">Source Account ID:</label> <!-- Change 'Source Account' to 'Source Account ID' -->
+    <select class="form-control" name="source_account" required>
+>>>>>>> 30acda6 (update)
         {% for account in user_accounts %}
             <option value="{{ account.id }}">{{ account.id }}</option> <!-- Change 'account.account' to 'account.id' -->
         {% endfor %}
     </select>
-    <button type="submit">Confirm and Continue</button>
+    <button style="background-color: #3bb986;" type="submit">Confirm and Continue</button>
   </form>
   
 >>>>>>> aabd2f2 (add linters)

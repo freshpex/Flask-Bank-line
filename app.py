@@ -291,7 +291,7 @@ def accounts():
     
     # Fetch the current user's accounts
     user_accounts = Account.query.filter_by(user_id=g.user['id']).all()
-    return render_template('accounts.html', user_accounts=user_accounts)  # Pass user_accounts to the template
+    return render_template('accounts.html', user_accounts=user_accounts)
 
 @app.template_filter('group_digits')
 def group_digits(s):
@@ -385,7 +385,13 @@ def view_receipt(transaction_id):
     transaction = Transaction.query.get(transaction_id)
     return render_template('view_receipt.html', transaction=transaction)
 
+<<<<<<< HEAD
 def process_transaction_logic(account_id, amount, description, transaction_type, destination_country=None, currency=None):
+=======
+# Route for processing transactions
+@app.route('/process_transaction_logic', methods=['POST'])
+def process_transaction_logic(account_id, amount, description, transaction_type, destination_country=None, currency=None, acc_number=None):
+>>>>>>> 30acda6 (update)
     account = Account.query.get(account_id)
     international_fee = INTERNATIONAL_FEE
 
@@ -394,13 +400,29 @@ def process_transaction_logic(account_id, amount, description, transaction_type,
 
     if account.balance < amount:
         return render_template('error.html', error_message='Insufficient funds.')
-        
+
     account.balance -= amount
 
     international_fee = INTERNATIONAL_FEE
 
     account.balance -= international_fee if transaction_type == 'international' else 0
-    
+
+    # Get the destination account or create a new one
+    destination_account_number = acc_number
+    destination_account = Account.query.filter_by(account_number=destination_account_number).first()
+
+    if not destination_account:
+        # Create a new destination account
+        destination_account = Account(
+            account_number=destination_account_number,
+            user_id=None,  # Set to None or handle user association accordingly
+            account_type='external',  # Indicate that it's an external account
+            balance=0.0  # Set an initial balance if needed
+        )
+
+        db.session.add(destination_account)
+        db.session.commit()
+
     new_transaction = Transaction(
         description=description,
         amount=-amount,
@@ -421,8 +443,8 @@ def process_transaction_logic(account_id, amount, description, transaction_type,
 
     db.session.add(new_receipt)
     db.session.commit()
-    return render_template('confirmation.html', confirmation_message=f"Transaction successfully processed. Receipt ID: {new_receipt.id}")
 
+    return render_template('confirmation.html', confirmation_message=f"Transaction successfully processed. Receipt ID: {new_receipt.id}")
 
 # Route for processing transactions
 @app.route('/process_transaction', methods=['POST'])
@@ -436,18 +458,43 @@ def process_transaction():
     description = request.form.get('description')
     destination_country = request.form.get('destination_country')
     currency = request.form.get('currency')
+<<<<<<< HEAD
 
     if transaction_type == 'international':
         destination_country = request.form.get('destination_country')
         currency = request.form.get('currency')
         international_fee = INTERNATIONAL_FEE
+=======
+    acc_number = request.form.get('acc_number')
+    acc_name = request.form.get('acc_name')
+>>>>>>> 30acda6 (update)
         
     user_accounts = Account.query.filter_by(user_id=g.user['id']).all() 
 
     if len(user_accounts) > 1:
         return render_template('process_transaction.html', user_accounts=user_accounts, amount=amount, description=description, transaction_type=transaction_type, source_account=account_id, destination_country=destination_country, currency=currency) 
-    return process_transaction_logic(account_id, amount, description, transaction_type, destination_country, currency)
+    return process_transaction_logic(account_id, amount, description, transaction_type, destination_country, currency, acc_number)
 
+<<<<<<< HEAD
+=======
+# Route for processing transactions
+@app.route('/process_double_transaction', methods=['POST'])
+def process_double_transaction():
+    if g.user is None:
+        return redirect(url_for('login'))
+
+    transaction_type = request.form.get('transaction_type')
+    account_id = request.form.get('source_account')
+    amount = float(request.form.get('amount'))
+    description = request.form.get('description')
+    destination_country = request.form.get('destination_country')
+    currency = request.form.get('currency')
+    acc_number = request.form.get('acc_number')
+    acc_name = request.form.get('acc_name')
+    return process_transaction_logic(account_id, amount, description, transaction_type, destination_country, currency, acc_number)
+
+
+>>>>>>> 30acda6 (update)
 @app.route('/loan_history/<int:account_id>')
 def loan_history(account_id):
     if g.user is None:
@@ -498,19 +545,6 @@ def deposit():
         if account.balance is None:
             account.balance = 0.0
 
-        # Perform the deposit
-        account.balance += amount
-
-        # Create a new transaction record
-        new_transaction = Transaction(
-            description='Deposit',
-            amount=amount,
-            user_id=g.user['id']
-        )
-
-        db.session.add(new_transaction)
-        db.session.commit()
-        
         # Create a Stripe Session
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
@@ -529,15 +563,51 @@ def deposit():
             cancel_url=url_for('deposit_cancel', _external=True),
         )
 
+        session['account_id'] = account_id
+        session['amount'] = amount
+
         return redirect(session.url)
+
     return render_template('deposit.html')
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> bf8bbb6 (Add background)
 =======
 @app.route('/deposit/success')
+=======
+@app.route('/deposit/success', methods=['GET'])
+>>>>>>> 30acda6 (update)
 def deposit_success():
-    return render_template('confirmation.html', confirmation_message='Deposit successful!')
+    # Retrieve the necessary information from the session
+    account_id = session.get('account_id')
+    amount = session.get('amount')
+
+    # Fetch the user's account
+    account = Account.query.filter_by(id=account_id).first()
+
+    if not account:
+        return render_template('error.html', error_message='Invalid account.')
+
+    # Ensure that account.balance is initialized to 0.0 if it's None
+    if account.balance is None:
+        account.balance = 0.0
+
+    # Perform the deposit
+    account.balance += amount
+
+    # Create a new transaction record
+    new_transaction = Transaction(
+        description='Deposit',
+        amount=amount,
+        user_id=g.user['id']
+    )
+
+    db.session.add(new_transaction)
+    db.session.commit()
+
+    return render_template('deposit_success.html')
+
 
 @app.route('/deposit/cancel')
 def deposit_cancel():

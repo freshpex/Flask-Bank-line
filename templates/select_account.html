@@ -33,7 +33,7 @@
 <header id="header"class="fixed-top " >
   <div class="container d-flex align-items-center">
 
-    <h1 class="logo me-auto"><a href="./index.html">Bank-Line</a></h1>
+    <h1 class="logo me-auto"><a href="/dashboard">Bank-Line</a></h1>
     <nav id="navbar" class="navbar">
       <ul>
         <li><a class="nav-link scrollto active" href="/dashboard">Home</a></li>
@@ -56,10 +56,16 @@
 <main>
   <section id="breadcrumbs" class="breadcrumbs">
 <!-- templates/select_account.html -->
+<<<<<<< HEAD
 <form method="POST" action="{{ url_for('confirm_transaction') }}">
   <h1>Select Account</h1>
 
   <label for="source_account">Select the account:</label>
+=======
+<form method="POST" class="signin-form" action="{{ url_for('confirm_transaction') }}">
+
+  <label style="color: #3bb986" class="form-control-placeholder" for="source_account">Select the account:</label>
+>>>>>>> 30acda6 (update)
   <select name="source_account" required>
       {% for account in user_accounts %}
           <option value="{{ account.account }}">{{ account.account }}</option>
@@ -70,7 +76,7 @@
   <input type="hidden" name="description" value="{{ description }}">
   <input type="hidden" name="transaction_type" value="{{ transaction_type }}">
 
-  <button type="submit">Confirm Transaction</button>
+  <button style="background-color: #3bb986;" type="submit">Confirm Transaction</button>
 </form>
 </section>
 </main>

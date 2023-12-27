@@ -33,7 +33,7 @@
 <header id="header"class="fixed-top " >
   <div class="container d-flex align-items-center">
 
-    <h1 class="logo me-auto"><a href="./index.html">Bank-Line</a></h1>
+    <h1 class="logo me-auto"><a href="/dashboard">Bank-Line</a></h1>
     <nav id="navbar" class="navbar">
       <ul>
         <li><a class="nav-link scrollto active" href="/dashboard">Home</a></li>
@@ -61,14 +61,14 @@
     <section id="breadcrumbs" class="breadcrumbs">
       <!-- view_receipt.html -->
 <!-- templates/view_receipt.html -->
-<h1>Receipt for Transaction ID {{ transaction.id }}</h1>
+<h1 style="color: #3bb986">Receipt for Transaction ID {{ transaction.id }}</h1>
 
-<p><strong>Date:</strong> {{ transaction.date }}</p>
-<p><strong>Description:</strong> {{ transaction.description }}</p>
-<p><strong>Amount:</strong> {{ transaction.amount }}</p>
+<p><strong style="color: #3bb986">Date:</strong> {{ transaction.date }}</p>
+<p><strong style="color: #3bb986">Description:</strong> {{ transaction.description }}</p>
+<p><strong style="color: #3bb986">Amount:</strong> {{ transaction.amount }}</p>
 <!-- Add other transaction details -->
 
-<a href="{{ url_for('history') }}">Back to Transaction History</a>
+<a style="background-color: #3bb986;" href="{{ url_for('history') }}">Back to Transaction History</a>
 
     </section>
 

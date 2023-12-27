@@ -38,10 +38,7 @@
 <header id="header" class="fixed-top " >
   <div class="container d-flex align-items-center">
 
-    <h1 class="logo me-auto"><a href="./index.html">Bank-Line</a></h1>
-    <!-- Uncomment below if you prefer to use an image logo -->
-    <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-
+    <h1 class="logo me-auto"><a href="/dashboard">Bank-Line</a></h1>
     <nav id="navbar" class="navbar">
       <ul>
         <li><a class="nav-link scrollto active" href="/dashboard">Home</a></li>
@@ -60,10 +57,6 @@
 </header><!-- End Header -->
 <body>
 
- <!-- video -->
- <video autoplay muted loop id="myVideo">
-  <source src="../static/video5.mp4" type="video/mp4">
-</video> 
 <!-- <div class="row1" style="margin-top: 50px;"> -->
 <br><br><br>
 <<<<<<< HEAD
@@ -90,6 +83,31 @@
     {% for account in user_accounts %}
       
       <section>
+<<<<<<< HEAD
+=======
+        <div class="container" data-aos="fade-up" style="margin-top: 50px;">
+          <div class="row">
+              <div class="col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+                  <div class="icon-box" style="border: 2px solid green; padding: 20px;">
+                      <div class="dish">
+                          <ul>
+                              <li> <strong style="color: #3bb986">Account ID: </strong>{{ account.id }}</li>
+                              <li> <strong style="color: #3bb986">Account Number: </strong>{{ account.account_number }}</li>
+                              <li> <strong style="color: #3bb986">Account Type: </strong>{{ account.account_type }}</li>
+                              <li>
+                                  <strong style="color: #3bb986">Account Balance: </strong> <span id="balance-{{ account.id }}">{{ account.balance }}</span>
+                                  <button onclick="toggleBalance(this)" data-target="balance-{{ account.id }}">
+                                      <i class="fa fa-eye"></i>
+                                  </button>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>      
+            
+>>>>>>> 30acda6 (update)
       <div class="container" data-aos="fade-up" style="margin-top: 50px;" style="padding-left: 100px;" >
         <div class="row" style="padding-left: 100px;" >
           <div class="col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">

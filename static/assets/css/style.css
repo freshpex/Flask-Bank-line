@@ -3874,12 +3874,12 @@ margin-top: 50px;
 
 .dish {
   width: 200px;
-  background-color: #fff;
   list-style: none;
   text-decoration: none;
   list-style-type: none;
   padding: 0;
   margin: 0;
+  border-color: #3bb986;
 }
 
 ul {
