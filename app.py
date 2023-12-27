@@ -394,24 +394,23 @@ def process_transaction_logic(account_id, amount, description, transaction_type,
 
     if account.balance < amount:
         return render_template('error.html', error_message='Insufficient funds.')
-    
-    if transaction_type == 'international':
-        amount = amount + international_fee
         
     account.balance -= amount
 
+    international_fee = INTERNATIONAL_FEE
+
+    account.balance -= international_fee if transaction_type == 'international' else 0
+    
     new_transaction = Transaction(
         description=description,
         amount=-amount,
-        user_id=account.user_id
+        user_id=account.user_id,
+        timestamp=datetime.utcnow()
     )
 
     db.session.add(new_transaction)
     db.session.commit()
 
-    international_fee = INTERNATIONAL_FEE
-
-    account.balance -= international_fee if transaction_type == 'international' else 0
     new_receipt = Receipt(
         transaction_id=new_transaction.id,
         amount=amount,
@@ -441,8 +440,7 @@ def process_transaction():
     if transaction_type == 'international':
         destination_country = request.form.get('destination_country')
         currency = request.form.get('currency')
-        international_fee = INTERNATIONAL_FEE        
-        amount -= international_fee
+        international_fee = INTERNATIONAL_FEE
         
     user_accounts = Account.query.filter_by(user_id=g.user['id']).all() 
 
@@ -545,7 +543,32 @@ def deposit_success():
 def deposit_cancel():
     return render_template('error.html', error_message='Deposit canceled.')
 
+<<<<<<< HEAD
 >>>>>>> 1a74477 (update)
+=======
+@app.route('/bank_statement', methods=['GET', 'POST'])
+def bank_statement():
+    if g.user is None:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        start_date = request.form.get('start_date')
+        end_date = request.form.get('end_date')
+
+        # Fetch transactions within the specified date range
+        start_datetime = datetime.strptime(start_date, '%Y-%m-%d')
+        end_datetime = datetime.strptime(end_date, '%Y-%m-%d')
+
+        user_transactions = Transaction.query.filter_by(user_id=g.user['id']).filter(
+            Transaction.timestamp >= start_datetime, Transaction.timestamp <= end_datetime).all()
+
+        return render_template('bank_statement.html', user_transactions=user_transactions)
+
+    # Render the bank statement filter form
+    return render_template('bank_statement_filter.html')
+
+
+>>>>>>> 3423e6f (Add bank statement generation. (#1))
 @app.errorhandler(400)
 def handle_bad_request(e):
     return 'Bad Request: {0}'.format(e.description), 400
