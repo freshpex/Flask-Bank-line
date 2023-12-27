@@ -74,7 +74,9 @@
                         <button onclick="toggleBalance(this)" data-target="balance-{{ account.id }}">
                           <i class="fa fa-eye"></i>
                         </button>
-                      </li><br>
+                      </li><br>                    
+                    <!-- Example button linking to the bank statement page -->
+                    <a href="{{ url_for('bank_statement') }}" class="btn btn-primary">Generate Bank Statement</a>
                   </li>
               {% endfor %}
           </ul>
