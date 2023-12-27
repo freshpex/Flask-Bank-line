@@ -371,7 +371,8 @@ def process_transaction_logic(account_id, amount, description, transaction_type,
     new_transaction = Transaction(
         description=description,
         amount=-amount,
-        user_id=account.user_id
+        user_id=account.user_id,
+        timestamp=datetime.utcnow()
     )
 
     db.session.add(new_transaction)
