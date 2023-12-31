@@ -1,24 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-from flask import Flask, render_template, request, g, session, jsonify, url_for, redirect, flash, send_from_directory
-import sqlite3, requests, hashlib, os, warnings, requests, datetime
-from werkzeug.utils import secure_filename
-<<<<<<< HEAD
-=======
-from model import db, User, Transaction, Receipt, Loan, Account
-from flask_migrate import Migrate
-<<<<<<< HEAD
-from config import INTERNATIONAL_FEE
->>>>>>> bf8bbb6 (Add background)
-=======
-from config import INTERNATIONAL_FEE  
->>>>>>> bcac195 (fix international transfer issues.)
-=======
-from flask import Flask, render_template, request, g, session, url_for, redirect, flash, send_from_directory, abort
-import sqlite3, hashlib, os, requests
-=======
 from flask import Flask, render_template, request, g, session, url_for, redirect, flash, send_from_directory, abort, jsonify
->>>>>>> 69dc0b6 (Complete flask bank-line.)
 from werkzeug.utils import secure_filename
 from model import db, User, Transaction, Receipt, Loan, Account, Card
 from flask_migrate import Migrate
@@ -28,19 +8,10 @@ import os
 from faker import Faker
 import random
 from datetime import datetime
-<<<<<<< HEAD
-
-fake = Faker()
->>>>>>> 1a74477 (update)
-=======
 import hashlib
->>>>>>> 69dc0b6 (Complete flask bank-line.)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(16)
-<<<<<<< HEAD
-DATABASE_FILE = 'database.db'
-=======
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 stripe_keys = {
@@ -53,7 +24,6 @@ fake = Faker()
 
 migrate = Migrate(app, db)
 db.init_app(app)
->>>>>>> 9b64c7a (work flow)
 
 def hash_password(password):
     salt = os.urandom(16)
@@ -70,23 +40,11 @@ def check_password(password, password_hash):
 
 
 def get_user(user_id):
-<<<<<<< HEAD
-    query = "SELECT id, email, first_name, last_name, username, gender, account, password_hash, notification_enabled, privacy_enabled FROM users WHERE id = ?"
-    args = (user_id,)
-    row = db_query(query, args)
-
-    if not row:
-=======
     user = User.query.get(user_id)
     if not user:
->>>>>>> 69dc0b6 (Complete flask bank-line.)
         return None
     return {
-<<<<<<< HEAD
-        'id': row[0][0], 'email': row[0][1], 'first_name': row[0][2], 'last_name': row[0][3], 'username': row[0][4], 'gender': row[0][5], 'account': row[0][6], 'password': row[0][7], 'notification_enabled': bool(row[0][8]), 'privacy_enabled': bool(row[0][9])
-=======
         'id': user.id, 'email': user.email, 'firstname': user.firstname, 'lastname': user.lastname, 'username': user.username, 'gender': user.gender, 'password': user.password, 'notification_enabled': user.notification_enabled, 'privacy_enabled': user.privacy_enabled, 'account_type': user.account_type
->>>>>>> 69dc0b6 (Complete flask bank-line.)
     }
 
 
@@ -99,16 +57,8 @@ def load_user():
         g.user = None
 
 def check_user_exists(email, username):
-<<<<<<< HEAD
-    # Check if user with the given email or username exists
-    query = "SELECT id FROM users WHERE email = ? OR username = ?"
-    args = (email, username)
-    user = db_query(query, args)
-
-=======
     # Use the query object to check if user with the given email or username exists
     user = User.query.filter((User.email == email) | (User.username == username)).first()
->>>>>>> 69dc0b6 (Complete flask bank-line.)
     return bool(user)
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -124,26 +74,10 @@ def signup():
             return render_template('signup.html', error=error_message)
 
         password_hash = hash_password(password)
-<<<<<<< HEAD
-
-        # Insert user into the database
-<<<<<<< HEAD
-        query = "INSERT INTO users (email, username, account, password_hash) VALUES (?, ?, ?, ?)"
-        args = (email, username, account, password_hash)
-=======
-        query = "INSERT INTO user (email, username, password) VALUES (?, ?, ?)"
-        args = (email, username, password_hash)
->>>>>>> 9b64c7a (work flow)
-
-        db_execute(query, args)
-
-        # Redirect to sign-in page
-=======
         user = User(email=email, username=username, password=password_hash)
         db.session.add(user)
         db.session.commit()
         
->>>>>>> 69dc0b6 (Complete flask bank-line.)
         return redirect(url_for('login'))
     return render_template('signup.html')
 
@@ -152,19 +86,8 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-<<<<<<< HEAD
-
-        # Check if user exists in database
-        query = "SELECT id, password_hash FROM users WHERE username = ?"
-        args = (username,)
-        row = db_query(query, args)
-
-        if not row:  # Check if row is empty
-            # User not found
-=======
         user = User.query.filter_by(username=username).first()
         if not user:
->>>>>>> 69dc0b6 (Complete flask bank-line.)
             error = 'Invalid email or password'
             return render_template('login.html', error=error)
 
@@ -199,14 +122,9 @@ def index():
 def dashboard():
     if g.user is None:
         return redirect(url_for('login'))
-    return render_template('dashboard.html')
-
-@app.route('/transaction')
-def transaction():
-    if g.user is None:
-        return redirect(url_for('login'))
-    user_accounts = User.query.filter_by(id=g.user['id']).all()
-    return render_template('transaction.html', user_accounts=user_accounts)
+    # Fetch the current user's accounts
+    user_accounts = Account.query.filter_by(user_id=g.user['id']).all()
+    return render_template('dashboard.html', user_accounts=user_accounts)
 
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
@@ -235,20 +153,12 @@ def products():
         return redirect(url_for('login'))
     return render_template('products.html')
 
-@app.route('/createaccount')
+@app.route('/createaccount', methods=['GET', 'POST'])
 def createaccount():
     if g.user is None:
         return redirect(url_for('login'))
-<<<<<<< HEAD
-=======
+    
     if request.method == 'POST':
-<<<<<<< HEAD
-        try:
-            fname = request.form['fname']
-            lname = request.form['lname']
-            gender = request.form['gender']
-            username = request.form['username']
-=======
         fname = request.form['fname']
         lname = request.form['lname']
         gender = request.form['gender']
@@ -256,61 +166,27 @@ def createaccount():
         id_front = request.form['file_nf']
         id_back = request.form['file']
         account_type = request.form['account_type']
->>>>>>> c3b245c (Add creat account more details)
 
-<<<<<<< HEAD
-            # Fetch the current user instance
-            current_user = User.query.get(g.user['id'])
-
-<<<<<<< HEAD
-            # Update the user details
-            current_user.username = username
-            current_user.firstname = fname
-            current_user.lastname = lname
-            current_user.gender = gender
-=======
-        # Update the user details
-=======
         current_user = User.query.get(g.user['id'])
->>>>>>> 69dc0b6 (Complete flask bank-line.)
         current_user.firstname = fname
         current_user.lastname = lname
         current_user.gender = gender
         current_user.account_type = account_type
->>>>>>> c3b245c (Add creat account more details)
 
-<<<<<<< HEAD
-            # Commit the changes to the database
-            db.session.commit()
-=======
         new_account = Account(user_id=g.user['id'], account_type=account_type)
         db.session.add(new_account)
-<<<<<<< HEAD
->>>>>>> 17da053 (Add view and hide account balance)
-
-            # Redirect to account page
-            return redirect(url_for('accounts'))
-        except Exception as e:
-            print(f"Error updating user details: {e}")
-            db.session.rollback()
-
-    # Render the createaccount page
->>>>>>> 9b64c7a (work flow)
-=======
         db.session.commit()
 
         return redirect(url_for('accounts'))
 
->>>>>>> 69dc0b6 (Complete flask bank-line.)
     return render_template('createaccount.html')
+
+
 
 @app.route('/accounts')
 def accounts():
     if g.user is None:
         return redirect(url_for('login'))
-<<<<<<< HEAD
-    return render_template('accounts.html')
-=======
     
     user_accounts = Account.query.filter_by(user_id=g.user['id']).all()
     return render_template('accounts.html', user_accounts=user_accounts)
@@ -319,7 +195,6 @@ def accounts():
 def group_digits(s):
     grouped_digits = [s[i:i + 4] for i in range(0, len(s), 4)]
     return ' '.join(grouped_digits)
->>>>>>> 1a74477 (update)
 
 @app.route('/cardpayment')
 def cardpayment():
@@ -382,15 +257,18 @@ def feedbacks():
         return redirect(url_for('login'))
     return render_template('feedbacks.html')
 
+@app.route('/transaction')
+def transaction():
+    if g.user is None:
+        return redirect(url_for('login'))
+    user_accounts = Account.query.filter_by(user_id=g.user['id']).all()
+    return render_template('transaction.html', user_accounts=user_accounts)
+
 @app.route('/history')
 def history():
     if g.user is None:
         return redirect(url_for('login'))
-    return render_template('history.html')
 
-<<<<<<< HEAD
-    
-=======
     user_transactions = Transaction.query.filter_by(user_id=g.user['id']).all()
     return render_template('history.html', user_transactions=user_transactions)
 
@@ -402,13 +280,8 @@ def view_receipt(transaction_id):
     transaction = Transaction.query.get(transaction_id)
     return render_template('view_receipt.html', transaction=transaction)
 
-<<<<<<< HEAD
-def process_transaction_logic(account_id, amount, description, transaction_type, destination_country=None, currency=None):
-=======
 # Route for processing transactions
-@app.route('/process_transaction_logic', methods=['POST'])
-def process_transaction_logic(account_id, amount, description, transaction_type, destination_country=None, currency=None, acc_number=None):
->>>>>>> 30acda6 (update)
+def process_transaction_logic(account_id, amount, description, transaction_type, acc_number, destination_country=None, currency=None):
     account = Account.query.get(account_id)
     international_fee = INTERNATIONAL_FEE
 
@@ -427,28 +300,16 @@ def process_transaction_logic(account_id, amount, description, transaction_type,
     destination_account_number = acc_number
     destination_account = Account.query.filter_by(account_number=destination_account_number).first()
 
-<<<<<<< HEAD
-    if not destination_account:
-        # Create a new destination account
-        destination_account = Account(
-            account_number=destination_account_number,
-            user_id=None,  # Set to None or handle user association accordingly
-            account_type='external',  # Indicate that it's an external account
-            balance=0.0  # Set an initial balance if needed
-        )
-
-        db.session.add(destination_account)
-=======
     if destination_account:
         destination_account.balance += amount
->>>>>>> 69dc0b6 (Complete flask bank-line.)
         db.session.commit()
 
     new_transaction = Transaction(
         description=description,
         amount=-amount,
         user_id=account.user_id,
-        timestamp=datetime.utcnow()
+        timestamp=datetime.utcnow(),
+        account_number=acc_number
     )
 
     db.session.add(new_transaction)
@@ -478,25 +339,15 @@ def process_transaction():
     description = request.form.get('description')
     destination_country = request.form.get('destination_country')
     currency = request.form.get('currency')
-<<<<<<< HEAD
-
-    if transaction_type == 'international':
-        destination_country = request.form.get('destination_country')
-        currency = request.form.get('currency')
-        international_fee = INTERNATIONAL_FEE
-=======
     acc_number = request.form.get('acc_number')
     acc_name = request.form.get('acc_name')
->>>>>>> 30acda6 (update)
         
     user_accounts = Account.query.filter_by(user_id=g.user['id']).all() 
 
     if len(user_accounts) > 1:
-        return render_template('process_transaction.html', user_accounts=user_accounts, amount=amount, description=description, transaction_type=transaction_type, source_account=account_id, destination_country=destination_country, currency=currency) 
-    return process_transaction_logic(account_id, amount, description, transaction_type, destination_country, currency, acc_number)
+        return render_template('process_transaction.html', user_accounts=user_accounts, amount=amount, description=description, transaction_type=transaction_type, acc_number=acc_number, source_account=account_id, destination_country=destination_country, currency=currency) 
+    return process_transaction_logic(account_id, amount, description, transaction_type, acc_number, destination_country, currency)
 
-<<<<<<< HEAD
-=======
 # Route for processing transactions
 @app.route('/process_double_transaction', methods=['POST'])
 def process_double_transaction():
@@ -511,10 +362,9 @@ def process_double_transaction():
     currency = request.form.get('currency')
     acc_number = request.form.get('acc_number')
     acc_name = request.form.get('acc_name')
-    return process_transaction_logic(account_id, amount, description, transaction_type, destination_country, currency, acc_number)
+    return process_transaction_logic(account_id, amount, description, transaction_type, acc_number, destination_country, currency)
 
 
->>>>>>> 30acda6 (update)
 @app.route('/loan_history/<int:account_id>')
 def loan_history(account_id):
     if g.user is None:
@@ -582,14 +432,7 @@ def deposit():
 
     return render_template('deposit.html')
 
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> bf8bbb6 (Add background)
-=======
-@app.route('/deposit/success')
-=======
 @app.route('/deposit/success', methods=['GET'])
->>>>>>> 30acda6 (update)
 def deposit_success():
     account_id = session.get('account_id')
     amount = session.get('amount')
@@ -620,9 +463,6 @@ def deposit_success():
 def deposit_cancel():
     return render_template('error.html', error_message='Deposit canceled.')
 
-<<<<<<< HEAD
->>>>>>> 1a74477 (update)
-=======
 @app.route('/bank_statement', methods=['GET', 'POST'])
 def bank_statement():
     if g.user is None:
@@ -643,7 +483,6 @@ def bank_statement():
     return render_template('bank_statement_filter.html')
 
 
->>>>>>> 3423e6f (Add bank statement generation. (#1))
 @app.errorhandler(400)
 def handle_bad_request(e):
     return 'Bad Request: {0}'.format(e.description), 400

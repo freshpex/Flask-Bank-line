@@ -36,32 +36,6 @@
     <h1 class="logo me-auto"><a href="/dashboard">Bank-Line</a></h1>
     <nav id="navbar" class="navbar">
       <ul>
-<<<<<<< HEAD
-        <li><a class="nav-link scrollto active" href="./index.html">Home</a></li>
-        <li><a class="nav-link scrollto" href="./index.html">About</a></li>
-        <li><a class="nav-link scrollto" href="./index.html">Services</a></li>
-
-        <li><a class="nav-link scrollto" href="./index.html">Team</a></li>
-        <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
-          <ul>
-            <li><a href="#">Drop Down 1</a></li>
-            <li class="dropdown"><a href="./index.html"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
-              <ul>
-                <li><a href="#">Deep Drop Down 1</a></li>
-                <li><a href="#">Deep Drop Down 2</a></li>
-                <li><a href="#">Deep Drop Down 3</a></li>
-                <li><a href="#">Deep Drop Down 4</a></li>
-                <li><a href="#">Deep Drop Down 5</a></li>
-              </ul>
-            </li>
-            <li><a href="#">Drop Down 2</a></li>
-            <li><a href="#">Drop Down 3</a></li>
-            <li><a href="#">Drop Down 4</a></li>
-          </ul>
-        </li>
-        <li><a class="nav-link scrollto" href="./index.html">Contact</a></li>
-        <li><a class="getstarted scrollto" href="./index.html">Get Started</a></li>
-=======
         <li><a class="nav-link scrollto active" href="/dashboard">Dashboard</a></li>
         <li><a class="nav-link scrollto" href="/products">Products</a></li>
         <li><a class="nav-link scrollto" href="/createaccount">Create Account</a></li>
@@ -70,7 +44,6 @@
         <li><a class="nav-link scrollto" href="/feedbacks">My FeedBacks</a></li>
         <li><a class="nav-link scrollto" href="/history">Transaction History</a></li>
         <li><a class="getstarted scrollto" href="/signout">Sign Out</a></li>
->>>>>>> 5ab2ff3 (Change home to Dashboard.)
       </ul>
       <i class="bi bi-list mobile-nav-toggle"></i>
     </nav><!-- .navbar -->
@@ -79,77 +52,26 @@
 </header><!-- End Header -->
 <body>
 
-<<<<<<< HEAD
-<!-- <div class="row1" style="margin-top: 50px;"> -->
-<<<<<<< HEAD
-<br><br><br>
-<<<<<<< HEAD
-  <!-- <div class="col-xl-3 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100"> -->
-    <a href="./click_here2.html"><img class="kol" data-aos="zoom-in" data-aos-delay="100" style="width: 150px;" src="../static/pnb.png" alt=""><br>
-      <h1 id="pp" data-aos="zoom-in" data-aos-delay="100" style="color: white;">WELCOME TO PNB BANK</h1></a>
-  <!-- </div> -->
-  
-  <section>
-    <div class="container" data-aos="fade-up" style="margin-top: 50px;" style="padding-left: 100px;" >
-  <div class="row" style="padding-left: 100px;" >
-    <div class="col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
-      <div class="icon-box" >
-        <a href="./deposite2.html"><div class="icon" id="imj"><img style="width: 150px;" src="../static/bank.png" alt=""></div>
-        <button class="col-md-5 d-flex align-items-stretch mt-4 mt-md-0" id="button1" >  Deposite </a></button>
-      </div>
-    </div>
-    
-    <div class="col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="200">
-      <div class="icon-box">
-        <a href="./loan.html"><div class="icon" id="imj"><img style="width: 150px;" src="../static/withdrawal.png" alt=""></div> 
-        <button class="col-md-5 d-flex align-items-stretch mt-4 mt-md-0" id="button1" >withdrawal </a></button>
-      </div>
-    </div>
-    
-    <div class="col-md-6 d-flex align-items-stretch mt-4 mt-xl-0" data-aos="zoom-in" data-aos-delay="300" style="padding-top: 60px;">
-      <div class="icon-box" >
-        <a href="./loan.html"><div class="icon" id="imj"><img style="width: 150px;" src="../static/insurance.png" alt=""></div> 
-        <button class="col-md-5 d-flex align-items-stretch mt-4 mt-md-0" id="button1" >Insurence </a></button>
-      </div>
-    </div>
-    <div class="col-md-6 d-flex align-items-stretch mt-4 mt-xl-0" data-aos="zoom-in" data-aos-delay="400" style="padding-top: 60px;">
-      <div class="icon-box" >
-        <a href="./loan.html"><div class="icon" id="imj"><img style="width: 150px;" src="../static/loan.png" alt=""></div> 
-        <button class="col-md-5 d-flex align-items-stretch mt-4 mt-md-0" id="button1" > Loan </a></button>
-      </div>
-    </div>
-  </div>
-  
-</div>
-  </section>
-=======
-=======
-<br><br><br><br><br><br>
->>>>>>> bf8bbb6 (Add background)
-
-<main>
-  <section id="breadcrumbs" class="breadcrumbs">
-<!-- transaction_history.html -->
-=======
 <br><br>
 
 <main>
   <section id="breadcrumbs" class="breadcrumbs">
 {% if user_transactions %}
->>>>>>> 69dc0b6 (Complete flask bank-line.)
    <ul>
-       {% for transaction in user_transactions %}
-           <li>
-               <strong style="color: #3bb986">Date:</strong> {{ transaction.date }}<br>
-               <strong style="color: #3bb986">Description:</strong> {{ transaction.description }}<br>
-               <a style="background-color: #3bb986" href="{{ url_for('view_receipt', transaction_id=transaction.id) }}">View Receipt</a>
-           </li>
-       {% endfor %}
+        {% for transaction in user_transactions %}
+            <li>
+                <strong style="color: #3bb986">Date:</strong> {{ transaction.date }}<br>
+                <strong style="color: #3bb986">Description:</strong> {{ transaction.description }}<br>
+                <a style="background-color: #3bb986" href="{{ url_for('view_receipt', transaction_id=transaction.id) }}">View Receipt</a>
+            </li>
+        {% endfor %}       
    </ul>
+   {% else %}
+        <p style="color: #3bb986">No transaction history available.</p>
+    {% endif %}
   </section>
 </main>
 
->>>>>>> aabd2f2 (add linters)
    
   <br><br>
   

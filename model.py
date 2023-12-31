@@ -33,6 +33,7 @@ class Transaction(db.Model):
     description = db.Column(db.String(255))
     amount = db.Column(db.Float)
     timestamp = db.Column(db.String(16), default=lambda: datetime.utcnow().strftime('%Y-%m-%d %H:%M'))
+    account_number = db.Column(db.String(255))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 class Loan(db.Model):

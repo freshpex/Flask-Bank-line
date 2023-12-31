@@ -62,6 +62,7 @@
 
 <p><strong style="color: #3bb986">Date:</strong> {{ transaction.date }}</p>
 <p><strong style="color: #3bb986">Description:</strong> {{ transaction.description }}</p>
+<p><strong style="color: #3bb986">IBAN NUMBER:</strong> {{ transaction.account_number }}</p>
 <p><strong style="color: #3bb986">Amount:</strong> {{ transaction.amount }}</p>
 
 <a style="background-color: #3bb986;" href="{{ url_for('history') }}">Back to Transaction History</a>
