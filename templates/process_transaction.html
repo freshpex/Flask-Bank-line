@@ -29,13 +29,6 @@
 
   <!-- Template Main CSS File -->
   <link href="../static/assets/css/style.css" rel="stylesheet">
-
-  <!-- =======================================================
-  * Template Name: Arsha - v4.9.0
-  * Template URL: https://bootstrapmade.com/arsha-free-bootstrap-html-template-corporate/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
 </head>
 <style>
   #header{
@@ -84,8 +77,9 @@ background: #3bb986;
 </header><!-- End Header -->
 <body>
 
-<br><br><br><br><br><br>
+<br><br>
 <main>
+<<<<<<< HEAD
   <section id="breadcrumbs" class="breadcrumbs">
 
              <!-- templates/process_transaction.html -->
@@ -126,6 +120,34 @@ background: #3bb986;
           </form>
         </section>
       </main>
+=======
+    <section id="breadcrumbs" class="breadcrumbs">
+      <form method="POST" class="signin-form" action="{{ url_for('process_double_transaction') }}">
+      <label class="form-control-placeholder" for="source_account">Select the account ID:</label> <!-- Change 'Select the account' to 'Select the account ID' -->
+      <select class="form-control" name="source_account" required>
+          {% for account in user_accounts %}
+              <option value="{{ account.id }}">{{ account.id }}</option> <!-- Change 'account.account' to 'account.id' -->
+          {% endfor %}
+      </select>
+      <p><strong style="color: #3bb986">Amount:</strong> {{ amount }}</p>
+      <p><strong style="color: #3bb986">Description:</strong> {{ description }}</p>
+      <p><strong style="color: #3bb986">IBAN NUMBER:</strong> {{ acc_number }}</p>
+      <p><strong style="color: #3bb986">Transaction Type:</strong> {{ transaction_type }}</p>
+      {% if transaction_type == 'international' %}
+          <label class="form-control-placeholder" for="destination_country">Destination Country:</label>
+          <input class="form-control" type="text" name="destination_country" required>
+          <label class="form-control-placeholder" for="currency">Currency:</label>
+          <input class="form-control" type="text" name="currency" required>
+      {% endif %}
+      <input class="form-control" type="hidden" name="amount" value="{{ amount }}">
+      <input class="form-control" type="hidden" name="description" value="{{ description }}">
+      <input class="form-control" type="hidden" name="acc_number" value="{{ acc_number }}">
+      <input class="form-control" type="hidden" name="transaction_type" value="{{ transaction_type }}">
+      <button style="background-color: #3bb986;" type="submit">Confirm Transaction</button>
+  </form>
+</section>
+</main>
+>>>>>>> 69dc0b6 (Complete flask bank-line.)
    
           <!-- ======= Footer ======= -->
    <footer id="footer">

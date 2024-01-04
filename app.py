@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 from flask import Flask, render_template, request, g, session, jsonify, url_for, redirect, flash, send_from_directory
 import sqlite3, requests, hashlib, os, warnings, requests, datetime
 from werkzeug.utils import secure_filename
@@ -15,17 +16,25 @@ from config import INTERNATIONAL_FEE
 =======
 from flask import Flask, render_template, request, g, session, url_for, redirect, flash, send_from_directory, abort
 import sqlite3, hashlib, os, requests
+=======
+from flask import Flask, render_template, request, g, session, url_for, redirect, flash, send_from_directory, abort, jsonify
+>>>>>>> 69dc0b6 (Complete flask bank-line.)
 from werkzeug.utils import secure_filename
 from model import db, User, Transaction, Receipt, Loan, Account, Card
 from flask_migrate import Migrate
 from config import INTERNATIONAL_FEE
-import stripe, os
+import stripe
+import os
 from faker import Faker
 import random
 from datetime import datetime
+<<<<<<< HEAD
 
 fake = Faker()
 >>>>>>> 1a74477 (update)
+=======
+import hashlib
+>>>>>>> 69dc0b6 (Complete flask bank-line.)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(16)
@@ -33,25 +42,25 @@ app.config['SECRET_KEY'] = os.urandom(16)
 DATABASE_FILE = 'database.db'
 =======
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-DATABASE_FILE = 'instance/database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 stripe_keys = {
     'secret_key': os.environ['STRIPE_SECRET_KEY'],
     'publishable_key': os.environ['STRIPE_PUBLISHABLE_KEY'],
 }
 stripe.api_key = stripe_keys['secret_key']
 
+fake = Faker()
+
 migrate = Migrate(app, db)
 db.init_app(app)
 >>>>>>> 9b64c7a (work flow)
 
-# Function handling the hash password
 def hash_password(password):
     salt = os.urandom(16)
     password_hash = hashlib.pbkdf2_hmac(
         'sha256', password.encode('utf-8'), salt, 100000)
     return salt + password_hash
 
-# Function handling the password checker for correctness and tallying
 def check_password(password, password_hash):
     salt = password_hash[:16]
     stored_password_hash = password_hash[16:]
@@ -61,15 +70,23 @@ def check_password(password, password_hash):
 
 
 def get_user(user_id):
+<<<<<<< HEAD
     query = "SELECT id, email, first_name, last_name, username, gender, account, password_hash, notification_enabled, privacy_enabled FROM users WHERE id = ?"
     args = (user_id,)
     row = db_query(query, args)
 
     if not row:
+=======
+    user = User.query.get(user_id)
+    if not user:
+>>>>>>> 69dc0b6 (Complete flask bank-line.)
         return None
-
     return {
+<<<<<<< HEAD
         'id': row[0][0], 'email': row[0][1], 'first_name': row[0][2], 'last_name': row[0][3], 'username': row[0][4], 'gender': row[0][5], 'account': row[0][6], 'password': row[0][7], 'notification_enabled': bool(row[0][8]), 'privacy_enabled': bool(row[0][9])
+=======
+        'id': user.id, 'email': user.email, 'firstname': user.firstname, 'lastname': user.lastname, 'username': user.username, 'gender': user.gender, 'password': user.password, 'notification_enabled': user.notification_enabled, 'privacy_enabled': user.privacy_enabled, 'account_type': user.account_type
+>>>>>>> 69dc0b6 (Complete flask bank-line.)
     }
 
 
@@ -81,59 +98,33 @@ def load_user():
     else:
         g.user = None
 
-# Get a useable connection to the database
-def get_db():
-    db = getattr(g, '_database', None)
-    if db is None:
-        db = g._database = sqlite3.connect(DATABASE_FILE)
-        db.row_factory = sqlite3.Row
-    return db
-
-# Close the database connection when the app shuts down
-@app.teardown_appcontext
-def close_connection(exception):
-    db = getattr(g, '_database', None)
-    if db is not None:
-        db.close()
-
-# return the results from a database query
-def db_query(query, args=None):
-    cur = get_db().execute(query, args or ())
-    rv = cur.fetchall()
-    cur.close()
-    return rv
-
-# execute a database query
-def db_execute(query, args=()):
-    conn = get_db()
-    conn.execute(query, args)
-    conn.commit()
-    return True
-
 def check_user_exists(email, username):
+<<<<<<< HEAD
     # Check if user with the given email or username exists
     query = "SELECT id FROM users WHERE email = ? OR username = ?"
     args = (email, username)
     user = db_query(query, args)
 
+=======
+    # Use the query object to check if user with the given email or username exists
+    user = User.query.filter((User.email == email) | (User.username == username)).first()
+>>>>>>> 69dc0b6 (Complete flask bank-line.)
     return bool(user)
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        # Get form data
         email = request.form['email']
         username = secure_filename(request.form['username'])
         password = request.form['password']
         session['username'] = username
 
-        # Check if user already exists
         if check_user_exists(email, username):
             error_message = 'User with the same email or username already exists.'
             return render_template('signup.html', error=error_message)
 
-        # Hash password
         password_hash = hash_password(password)
+<<<<<<< HEAD
 
         # Insert user into the database
 <<<<<<< HEAD
@@ -147,17 +138,21 @@ def signup():
         db_execute(query, args)
 
         # Redirect to sign-in page
+=======
+        user = User(email=email, username=username, password=password_hash)
+        db.session.add(user)
+        db.session.commit()
+        
+>>>>>>> 69dc0b6 (Complete flask bank-line.)
         return redirect(url_for('login'))
-
-    # Render sign-up page
     return render_template('signup.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        # Get form data
         username = request.form['username']
         password = request.form['password']
+<<<<<<< HEAD
 
         # Check if user exists in database
         query = "SELECT id, password_hash FROM users WHERE username = ?"
@@ -166,22 +161,21 @@ def login():
 
         if not row:  # Check if row is empty
             # User not found
+=======
+        user = User.query.filter_by(username=username).first()
+        if not user:
+>>>>>>> 69dc0b6 (Complete flask bank-line.)
             error = 'Invalid email or password'
             return render_template('login.html', error=error)
 
-        # Check password
-        password_hash = row[0][1]
+        password_hash = user.password
         if check_password(password, password_hash):
-            # Password is correct, store user ID in session
-            # Access the first row's first element
-            session['user_id'] = row[0][0]
+            session['user_id'] = user.id
             return redirect('/dashboard')
         else:
-            # Password is incorrect
             error = 'Invalid email or password'
             return render_template('login.html', error=error)
 
-    # Render sign-in page
     return render_template('login.html')
 
 
@@ -264,6 +258,7 @@ def createaccount():
         account_type = request.form['account_type']
 >>>>>>> c3b245c (Add creat account more details)
 
+<<<<<<< HEAD
             # Fetch the current user instance
             current_user = User.query.get(g.user['id'])
 
@@ -275,6 +270,9 @@ def createaccount():
             current_user.gender = gender
 =======
         # Update the user details
+=======
+        current_user = User.query.get(g.user['id'])
+>>>>>>> 69dc0b6 (Complete flask bank-line.)
         current_user.firstname = fname
         current_user.lastname = lname
         current_user.gender = gender
@@ -287,6 +285,7 @@ def createaccount():
 =======
         new_account = Account(user_id=g.user['id'], account_type=account_type)
         db.session.add(new_account)
+<<<<<<< HEAD
 >>>>>>> 17da053 (Add view and hide account balance)
 
             # Redirect to account page
@@ -297,6 +296,12 @@ def createaccount():
 
     # Render the createaccount page
 >>>>>>> 9b64c7a (work flow)
+=======
+        db.session.commit()
+
+        return redirect(url_for('accounts'))
+
+>>>>>>> 69dc0b6 (Complete flask bank-line.)
     return render_template('createaccount.html')
 
 @app.route('/accounts')
@@ -307,13 +312,11 @@ def accounts():
     return render_template('accounts.html')
 =======
     
-    # Fetch the current user's accounts
     user_accounts = Account.query.filter_by(user_id=g.user['id']).all()
     return render_template('accounts.html', user_accounts=user_accounts)
 
 @app.template_filter('group_digits')
 def group_digits(s):
-    # Format the string s by grouping digits in fours
     grouped_digits = [s[i:i + 4] for i in range(0, len(s), 4)]
     return ' '.join(grouped_digits)
 >>>>>>> 1a74477 (update)
@@ -349,7 +352,7 @@ def generate_cvv():
 
 def generate_expiration_date():
     current_year = datetime.now().year
-    expiration_year = current_year + random.randint(1, 5)  # Card valid for 1 to 5 years
+    expiration_year = current_year + random.randint(1, 5) 
     expiration_month = random.randint(1, 12)
     
     expiration_date = f"{expiration_month:02d}/{expiration_year}"
@@ -365,13 +368,9 @@ def generate_card():
     cvv = generate_cvv()
     expiration_date = generate_expiration_date()
     cardholder_name = request.form.get('name')
-    # Assuming g.user is the currently logged-in user
     user_id=g.user['id']
 
-    # Create a new Card instance and associate it with the current user
     card = Card(card_number=card_number, cvv=cvv, expiration_date=expiration_date, cardholder_name=cardholder_name, card_type=card_type, user_id=user_id)
-    
-    # Add the new card to the database
     db.session.add(card)
     db.session.commit()
 
@@ -425,10 +424,10 @@ def process_transaction_logic(account_id, amount, description, transaction_type,
 
     account.balance -= international_fee if transaction_type == 'international' else 0
 
-    # Get the destination account or create a new one
     destination_account_number = acc_number
     destination_account = Account.query.filter_by(account_number=destination_account_number).first()
 
+<<<<<<< HEAD
     if not destination_account:
         # Create a new destination account
         destination_account = Account(
@@ -439,6 +438,10 @@ def process_transaction_logic(account_id, amount, description, transaction_type,
         )
 
         db.session.add(destination_account)
+=======
+    if destination_account:
+        destination_account.balance += amount
+>>>>>>> 69dc0b6 (Complete flask bank-line.)
         db.session.commit()
 
     new_transaction = Transaction(
@@ -464,7 +467,6 @@ def process_transaction_logic(account_id, amount, description, transaction_type,
 
     return render_template('confirmation.html', confirmation_message=f"Transaction successfully processed. Receipt ID: {new_receipt.id}")
 
-# Route for processing transactions
 @app.route('/process_transaction', methods=['POST'])
 def process_transaction():
     if g.user is None:
@@ -530,17 +532,13 @@ def request_loan():
         account_id = request.form.get('account_id')
         amount = float(request.form.get('amount'))
 
-        # Create a new loan request
         new_loan = Loan(account_id=account_id, amount=amount, status='pending')
 
-        # Add the loan request to the database
         db.session.add(new_loan)
         db.session.commit()
 
-        # Redirect to loan history page
         return redirect(url_for('loan_history', account_id=account_id))
 
-    # Render the loan request page
     return render_template('request_loan.html')
 
 @app.route('/deposit', methods=['GET', 'POST'])
@@ -549,26 +547,22 @@ def deposit():
         return redirect(url_for('login'))
     
     if request.method == 'POST':
-        # Get form data
         amount = float(request.form['amount'])
         account_id = int(request.form['account_id'])
 
-        # Fetch the user's account
         account = Account.query.filter_by(id=account_id).first()
 
         if not account:
             return render_template('error.html', error_message='Invalid account.')
 
-        # Ensure that account.balance is initialized to 0.0 if it's None
         if account.balance is None:
             account.balance = 0.0
 
-        # Create a Stripe Session
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[{
                 'price_data': {
-                    'currency': 'usd',  # Change to your desired currency
+                    'currency': 'usd',
                     'unit_amount': int(amount * 100),  # Amount in cents
                     'product_data': {
                         'name': 'Deposit',
@@ -597,24 +591,19 @@ def deposit():
 @app.route('/deposit/success', methods=['GET'])
 >>>>>>> 30acda6 (update)
 def deposit_success():
-    # Retrieve the necessary information from the session
     account_id = session.get('account_id')
     amount = session.get('amount')
 
-    # Fetch the user's account
     account = Account.query.filter_by(id=account_id).first()
 
     if not account:
         return render_template('error.html', error_message='Invalid account.')
 
-    # Ensure that account.balance is initialized to 0.0 if it's None
     if account.balance is None:
         account.balance = 0.0
 
-    # Perform the deposit
     account.balance += amount
 
-    # Create a new transaction record
     new_transaction = Transaction(
         description='Deposit',
         amount=amount,
@@ -643,7 +632,6 @@ def bank_statement():
         start_date = request.form.get('start_date')
         end_date = request.form.get('end_date')
 
-        # Fetch transactions within the specified date range
         start_datetime = datetime.strptime(start_date, '%Y-%m-%d')
         end_datetime = datetime.strptime(end_date, '%Y-%m-%d')
 
@@ -652,7 +640,6 @@ def bank_statement():
 
         return render_template('bank_statement.html', user_transactions=user_transactions)
 
-    # Render the bank statement filter form
     return render_template('bank_statement_filter.html')
 
 

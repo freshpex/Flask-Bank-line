@@ -53,20 +53,16 @@
 
 <body>
 
-  <br><br><br><br><br><br>
-
+  <br><br>
   <main id="main">
 
     <!-- ======= Breadcrumbs ======= -->
     <section id="breadcrumbs" class="breadcrumbs">
-      <!-- view_receipt.html -->
-<!-- templates/view_receipt.html -->
 <h1 style="color: #3bb986">Receipt for Transaction ID {{ transaction.id }}</h1>
 
 <p><strong style="color: #3bb986">Date:</strong> {{ transaction.date }}</p>
 <p><strong style="color: #3bb986">Description:</strong> {{ transaction.description }}</p>
 <p><strong style="color: #3bb986">Amount:</strong> {{ transaction.amount }}</p>
-<!-- Add other transaction details -->
 
 <a style="background-color: #3bb986;" href="{{ url_for('history') }}">Back to Transaction History</a>
 

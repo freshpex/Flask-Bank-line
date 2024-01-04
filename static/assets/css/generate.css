@@ -85,6 +85,7 @@ p {
 }
 
 .disclaimer {
+    margin-top: 40px;
     position: absolute;
     bottom: 5px;
     text-align: center;
@@ -116,4 +117,8 @@ p {
 
 .holder {
     margin-top: 10px;
+}
+
+#about{
+    margin-top: 40px;
 }
