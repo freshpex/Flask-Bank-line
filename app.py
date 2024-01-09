@@ -2,13 +2,14 @@ from flask import Flask, render_template, request, g, session, url_for, redirect
 from werkzeug.utils import secure_filename
 from model import db, User, Transaction, Receipt, Loan, Account, Card
 from flask_migrate import Migrate
-from config import INTERNATIONAL_FEE
+from config import INTERNATIONAL_FEE, CODED
 import stripe
 import os
 from faker import Faker
 import random
 from datetime import datetime
 import hashlib
+import uuid
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(16)
@@ -122,9 +123,16 @@ def index():
 def dashboard():
     if g.user is None:
         return redirect(url_for('login'))
+    
+    current_user = User.query.get(g.user['id'])
+    
+    profile_image_url = url_for('static', filename=current_user.profile_image_path)
+    
+    print(profile_image_url)
+
     # Fetch the current user's accounts
     user_accounts = Account.query.filter_by(user_id=g.user['id']).all()
-    return render_template('dashboard.html', user_accounts=user_accounts)
+    return render_template('dashboard.html', user_accounts=user_accounts, profile_image_url=profile_image_url)
 
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
@@ -159,19 +167,39 @@ def createaccount():
         return redirect(url_for('login'))
     
     if request.method == 'POST':
+        print(request.files)
         fname = request.form['fname']
         lname = request.form['lname']
         gender = request.form['gender']
-        picture = request.form['file']
-        id_front = request.form['file_nf']
-        id_back = request.form['file']
+        picture = request.files.get('pic')
+        id_front = request.files.get('front')
+        id_back = request.files.get('back')
+        
         account_type = request.form['account_type']
+        passcode = request.form['passcode']
+        pin = request.form.get('pin')
+        
+        print("PASSCODE IN FORM IS: ", passcode)
+        print("CODED VALUE IS: ", CODED)
+        print("PIN IN FORM IS: ", pin)
+        
+        if passcode != "CODED":
+            return render_template('error.html', error="incorrect Passcode, Submit a complaint to an Admin")
 
+         # Save the file to the images folder
+        folder_name = 'static'
+        if not os.path.exists(folder_name):
+            os.makedirs(folder_name)
+        filename = secure_filename(picture.filename)
+        picture.save(os.path.join(folder_name, filename))
+        
         current_user = User.query.get(g.user['id'])
         current_user.firstname = fname
         current_user.lastname = lname
         current_user.gender = gender
         current_user.account_type = account_type
+        current_user.pin = pin
+        current_user.profile_image_path = filename
 
         new_account = Account(user_id=g.user['id'], account_type=account_type)
         db.session.add(new_account)
@@ -180,8 +208,6 @@ def createaccount():
         return redirect(url_for('accounts'))
 
     return render_template('createaccount.html')
-
-
 
 @app.route('/accounts')
 def accounts():
@@ -341,6 +367,12 @@ def process_transaction():
     currency = request.form.get('currency')
     acc_number = request.form.get('acc_number')
     acc_name = request.form.get('acc_name')
+    pin = int(request.form.get('pin'))
+    
+    current_user = User.query.get(g.user['id'])
+    
+    if pin != current_user.pin:
+        return render_template('error.html', error= "Incorrect Pin")
         
     user_accounts = Account.query.filter_by(user_id=g.user['id']).all() 
 
@@ -380,7 +412,13 @@ def request_loan():
     
     if request.method == 'POST':
         account_id = request.form.get('account_id')
-        amount = float(request.form.get('amount'))
+        amount = float(request.form.get('amount'))        
+        pin = int(request.form.get('pin'))
+    
+        current_user = User.query.get(g.user['id'])
+        
+        if pin != current_user.pin:
+            return render_template('error.html', error= "Incorrect Pin")
 
         new_loan = Loan(account_id=account_id, amount=amount, status='pending')
 

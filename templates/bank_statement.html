@@ -72,18 +72,20 @@
                 </tr>
             </thead>
             <tbody>
-                {% for transaction in user_transactions %}
-                    <tr>
-                        <td>{{ transaction.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-                        <td>{{ transaction.description }}</td>
-                        <td>{{ transaction.amount }}</td>
-                    </tr>
-                {% endfor %}
+              {% for transaction in user_transactions %}
+              <tr>
+                  <td>{{ transaction.date }}</td>
+                  <td>{{ transaction.description }}</td>
+                  <td>{{ transaction.amount }}</td>
+                </tr>
+              {% endfor %}    
             </tbody>
         </table>
     {% else %}
         <p style="color: #3bb986">No transactions found for the selected date range.</p>
     {% endif %}
+  </section>
+</main>
 <!-- ======= Footer ======= -->
 <footer id="footer">
 

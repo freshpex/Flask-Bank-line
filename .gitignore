@@ -4,3 +4,11 @@ seed.sql
 
 /.vscode
 /__pycache__
+
+# Ignore seed and schema files
+seed.sql
+schema.sql
+
+.env
+
+initdb.py

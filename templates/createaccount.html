@@ -55,7 +55,10 @@
  
   <main>
     <section>
-        <form method="POST" action="/createaccount" class="signin-form">
+        <form method="POST" action="/createaccount" enctype="multipart/form-data" class="signin-form">
+            <label style="color: #47b2e4" class="form-control-placeholder" for="passcode">Authorization passcode:</label>
+            <input class="form-control" type="text" id="passcode" name="passcode" required>
+
             <label style="color: #3bb986" for="fname" class="form-control-placeholder">First Name:</label>
             <input class="form-control" type="text" name="fname" required>
             <br>
@@ -73,17 +76,20 @@
             <label style="color: #3bb986" for="other">Other</label>
             <br>
 
-            <label style="color: #3bb986" for="file" class="form-control-placeholder">Picture:</label>
-            <input class="form-control" id="file" type="file" name="file" required>
+            <label style="color: #3bb986" for="pic" class="form-control-placeholder">Picture:</label>
+            <input class="form-control" id="file" type="file" name="pic" required>
             <br>
 
-            <label style="color: #3bb986" for="file_nf" class="form-control-placeholder">Nation ID Card Front:</label>
-            <input class="form-control" type="file" id="file_nf" name="file_nf" required>
+            <label style="color: #3bb986" for="back" class="form-control-placeholder">National Identity Card Back cover:</label>
+            <input class="form-control" id="back" type="file" name="back">
             <br>
 
-            <label style="color: #3bb986" for="file_nb" class="form-control-placeholder">Nation ID Card Back:</label>
-            <input class="form-control" id="file_nb" type="file" name="file_nb" required>
+            <label style="color: #3bb986" for="front" class="form-control-placeholder">National Identity Card Front cover:</label>
+            <input class="form-control" id="front" type="file" name="front">
             <br>
+
+            <label style="color: #3bb986" class="form-control-placeholder" for="pin">Create Transaction Pin:</label>
+            <input class="form-control" type="number" id="pin" name="pin" required>
 
             <label style="color: #3bb986" style="color: #47b2e4"for="account_type" class="form-control-placeholder">Account Type:</label> <!-- Changed 'account' to 'account_type' -->
             <select class="form-control" name="account_type" required>

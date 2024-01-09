@@ -56,15 +56,14 @@
   </div>
 </header><!-- End Header -->
 <body>
-
-<br><br>
-      <h1 id="pp" data-aos="zoom-in" data-aos-delay="100" style="color: white;">Welcome {{ g.user.username }}!</h1></a>
+<br><br><br><br>
 {% if user_accounts%}
   <main>
-    {% for account in user_accounts %}
-      
+    {% for account in user_accounts %}  
       <section>
         <div class="container" data-aos="fade-up" style="margin-top: 50px;">
+          <h1 id="pp" data-aos="zoom-in" data-aos-delay="100" style="color: white;">Welcome {{ g.user.username }}!</h1></a>
+          <img src="{{ profile_image_url }}" alt="Profile Image" style="height: 150px; width: 150px; border-radius: 50%; border: 5px solid #3bb986; position: absolute; top: 20px; right: 20px;">
           <div class="row">
               <div class="col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
                   <div class="icon-box" style="border: 2px solid green; padding: 20px;">
